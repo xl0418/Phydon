@@ -9,6 +9,8 @@
 Phydon <- function(data_info_df,
                        opt_temp = 20) {
 
+  ## load the necessary data
+  print("Loading the necessary data ...")
   GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded", envir = asNamespace("Phydon"))
   gtdb_tree <- get0("gtdb_tree", envir = asNamespace("Phydon"))
   sp_clusters <- get0("sp_clusters", envir = asNamespace("Phydon"))
@@ -28,6 +30,7 @@ Phydon <- function(data_info_df,
   ## check if the third column exists
   if (ncol(data_info_df) == 3) {
     opt_temps <- data_info_df$opt_temp
+    print("The optimal growth temperatures are provided.")
   }
 
   if (nrow(data_info_df) == 0) {
