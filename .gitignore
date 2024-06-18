@@ -7,3 +7,5 @@
 .DS_Store
 .quarto
 inst/doc
+pkgdowntravis.Rproj
+.Rproj*
