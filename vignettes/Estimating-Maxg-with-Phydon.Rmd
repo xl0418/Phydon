@@ -1,0 +1,82 @@
+---
+title: "Estimating Maximum Growth Rates from Genomic Data with Phydon"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimating Maximum Growth Rates from Genomic Data with Phydon}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+Phydon is a R package that estimates the maximum growth rate of a microbial community from genomic data. The package is based on the method described in [Our paper](). The method takes advantage of phylogenetic signal to improve accuracy of estimation of the maximum growth rate. 
+
+# Installation
+
+You can install the development version of Phydon from GitHub with:
+
+```{r, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("xl0418/Phydon")
+```
+
+```{r, echo=FALSE}
+library(formattable)
+```
+
+# Usage
+
+First, load the package and the example data.
+
+```{r setup, warning=FALSE}
+library(Phydon)
+# load the example data
+data_info <- read.csv(system.file("extdata", "data_info.csv", package = "Phydon"))
+```
+
+The data_info is a data frame that contains the following columns:
+
+```{r data_info1, echo=FALSE}
+formattable(data_info)
+```
+
+The columns are:
+
+- `gene_loc`: the location of the gene file (.ffn) in the package
+
+- `accession_no`: the accession number of the genome
+
+
+```{r data_info2, echo=FALSE}
+
+# process the directory of the genomic data
+genomes <- data_info$accession_no
+gene_loc <- c()
+for (i in 1:length(genomes)) {
+  gene_loc[i] <- system.file("extdata", paste0("genefiles/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+}
+
+data_info$gene_loc <- gene_loc
+```
+
+
+Now, you are ready to estimate the maximum growth rate.
+
+```{r, warning=FALSE}
+# estimate the maximum growth rate
+result <- Phydon(data_info)
+```
+
+```{r result, echo=FALSE}
+formattable(result, list(
+  phy_distance = color_tile("white", "red"),
+  area(col = c(gRodonpred, phylopred, combopred)) ~ normalize_bar("pink", 0.2)
+))
+```
