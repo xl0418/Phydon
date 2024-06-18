@@ -7,7 +7,7 @@ Maintainer: Liang Xu <xl0418@gmail.com>
 Description: Phydon is a package that estimates the maximum growth rates of bacteria species based on their genomic features. It takes advantage of the mechanisitic method "gRodon" and the phylogenetic signal to provide a more accurate estimation of the maximum growth rates of bacteria species.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: false
+LazyData: true
 Imports: ape,castor,gRodon,Biostrings,picante,stats,utils,devtools
 RoxygenNote: 7.3.1
 LazyDataCompression: xz

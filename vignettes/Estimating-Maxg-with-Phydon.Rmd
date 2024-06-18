@@ -27,9 +27,6 @@ You can install the development version of Phydon from GitHub with:
 devtools::install_github("xl0418/Phydon")
 ```
 
-```{r, echo=FALSE}
-library(formattable)
-```
 
 # Usage
 
@@ -44,7 +41,7 @@ data_info <- read.csv(system.file("extdata", "data_info.csv", package = "Phydon"
 The data_info is a data frame that contains the following columns:
 
 ```{r data_info1, echo=FALSE}
-formattable(data_info)
+data_info
 ```
 
 The columns are:
@@ -75,8 +72,5 @@ result <- Phydon(data_info)
 ```
 
 ```{r result, echo=FALSE}
-formattable(result, list(
-  phy_distance = color_tile("white", "red"),
-  area(col = c(gRodonpred, phylopred, combopred)) ~ normalize_bar("pink", 0.2)
-))
+result
 ```
