@@ -8,9 +8,8 @@ Description: Phydon is a package that estimates the maximum growth rates of bact
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: ape,castor,gRodon,Biostrings,picante,stats,utils,devtools
+Imports: ape,castor,gRodon,Biostrings,picante,stats,utils
 RoxygenNote: 7.3.1
-LazyDataCompression: xz
 Depends: 
     R (>= 3.5.0)
 Suggests: 

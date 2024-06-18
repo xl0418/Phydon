@@ -35,6 +35,7 @@ First, load the package and the example data.
 ```{r setup, warning=FALSE}
 library(Phydon)
 # load the example data
+# devtools::load_all()
 data_info <- read.csv(system.file("extdata", "data_info.csv", package = "Phydon"))
 ```
 

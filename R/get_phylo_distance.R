@@ -64,11 +64,11 @@ get_phylo_distance <- function(genomes_to_est,
   for (i in 1:nrow(species_genome_repgenome_df)) {
     single_rep_genome <- species_genome_repgenome_df$rep_genome[i]
     min_dist_test_train <-
-      min(stats::cophenetic(gtdb.subtree)[single_rep_genome, rep_genomes_database])
+      min(ape::cophenetic.phylo(gtdb.subtree)[single_rep_genome, rep_genomes_database])
 
     # the index of the minimum distance
     index_min_dist <-
-      which(stats::cophenetic(gtdb.subtree)[single_rep_genome, rep_genomes_database] == min_dist_test_train)
+      which(ape::cophenetic.phylo(gtdb.subtree)[single_rep_genome, rep_genomes_database] == min_dist_test_train)
 
     neighbor_repgenome_train <-
       unique(rep_genomes_database[index_min_dist])
