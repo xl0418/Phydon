@@ -10,7 +10,7 @@ Phydon <- function(data_info_df,
                        opt_temp = 20) {
 
   ## load the necessary data
-  print("Loading the necessary data ...")
+  print("Loading internal data ...")
   GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded", envir = asNamespace("Phydon"))
   gtdb_tree <- get0("gtdb_tree", envir = asNamespace("Phydon"))
   sp_clusters <- get0("sp_clusters", envir = asNamespace("Phydon"))
@@ -23,7 +23,7 @@ Phydon <- function(data_info_df,
   print(
     paste0(
       length(genomes_to_est),
-      " genomes are found in the gene file and for estimation of the maximum growth rates ..."
+      " genomes are found in the gene file. Start estimating maximum growth rates ..."
     )
   )
 
@@ -31,6 +31,8 @@ Phydon <- function(data_info_df,
   if (ncol(data_info_df) == 3) {
     opt_temps <- data_info_df$opt_temp
     print("The optimal growth temperatures are provided.")
+  } else {
+    print("The optimal growth temperatures are not provided. Default is 20.")
   }
 
   if (nrow(data_info_df) == 0) {
@@ -68,6 +70,12 @@ Phydon <- function(data_info_df,
   )
 
   rep_genomes_df <- prepare_for_genomes_to_est[[1]]
+  # deal with unkown species, only gRodon estimates are provided
+  unknown <- rep_genomes_df[which(is.na(rep_genomes_df$species)), ]
+
+
+  # for known species, both gRodon and phylopred estimates are provided
+  rep_genomes_df <- rep_genomes_df[which(!is.na(rep_genomes_df$species)), ]
   rep_genomes_to_est <- unique(rep_genomes_df$rep_genome)
   phydis_tree <- prepare_for_genomes_to_est[[2]]
   Est_phylopred <- PhloPred(rep_genomes_to_est,
@@ -81,6 +89,14 @@ Phydon <- function(data_info_df,
   ## combopred estimates
   input_df <- merge(est_gRodon_df, phylopred_df, by = "genome")
   combopred_df <- combopred(input_df, reg_model)
+
+  ## rbind unknown species
+  if(nrow(unknown) > 0){
+    unknown <- merge(est_gRodon_df, unknown, by = "genome")
+    unknown$phylopred <- NA
+    unknown$combopred <- NA
+    combopred_df <- rbind(combopred_df, unknown)
+  }
 
   ## rearrange the columns
   combopred_df <- combopred_df[, c(

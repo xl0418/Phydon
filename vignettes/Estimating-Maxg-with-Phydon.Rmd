@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Phydon is a R package that estimates the maximum growth rate of a microbial community from genomic data. The package is based on the method described in [Our paper](). The method takes advantage of phylogenetic signal to improve accuracy of estimation of the maximum growth rate. 
+Phydon is a R package that estimates maximum growth rates of bacteria from genomic data. This package implements a method detailed in [Our paper](), which leverages phylogenetic signals and mechanistic statistics, specifically [codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details of this mechanistic method), to enhance the accuracy of growth rate estimations. By integrating these advanced techniques, Phydon provides a robust tool for microbial growth rate analysis based on genomic information. 
 
 # Installation
 
@@ -27,6 +27,17 @@ You can install the development version of Phydon from GitHub with:
 devtools::install_github("xl0418/Phydon")
 ```
 
+> [!IMPORTANT]\
+> Phydon has several essential dependencies, including `gRodon2`, `ape`, `Biostrings`, `picante`, etc. Please make sure you have installed these packages before using Phydon.
+
+> ```
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+> BiocManager::install("Biostrings")
+> BiocManager::install("coRdon")
+> install.packages("matrixStats")
+> ```
 
 # Usage
 

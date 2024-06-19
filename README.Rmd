@@ -1,0 +1,100 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# Phydon
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+The goal of Phydon is to ...
+
+# Introduction
+
+Phydon is a R package that estimates maximum growth rates of bacteria from genomic data. This package implements a method detailed in [Our paper](), which leverages phylogenetic signals and mechanistic statistics, specifically [codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details of this mechanistic method), to enhance the accuracy of growth rate estimations. By integrating these advanced techniques, Phydon provides a robust tool for microbial growth rate analysis based on genomic information.
+
+# Installation
+
+You can install the development version of Phydon from GitHub with:
+
+```{r, eval = FALSE}
+if (!requireNamespace("devtools", quietly = TRUE))
+  install.packages("devtools")
+devtools::install_github("xl0418/Phydon")
+```
+
+> [!IMPORTANT]\
+> Phydon has several essential dependencies, including `gRodon2`, `ape`, `Biostrings`, `picante`, etc. Please make sure you have installed these packages before using Phydon.
+
+```{r, eval = FALSE}         
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("Biostrings")
+BiocManager::install("coRdon")
+install.packages("matrixStats") 
+
+if (!requireNamespace("devtools", quietly = TRUE))
+  install.packages("devtools")
+devtools::install_github("jlw-ecoevo/gRodon2")
+```
+
+
+
+# Usage
+
+First, load the package and the example data.
+
+```{r setup, warning=FALSE}
+library(Phydon)
+# load the example data
+# devtools::load_all()
+data_info <- read.csv(system.file("extdata", "data_info.csv", package = "Phydon"))
+```
+
+The data_info is a data frame that contains the following columns:
+
+```{r data_info1, echo=FALSE}
+data_info
+```
+
+The columns are:
+
+-   `gene_loc`: the location of the gene file (.ffn) in the package
+
+-   `accession_no`: the accession number of the genome
+
+```{r data_info2, echo=FALSE}
+
+# process the directory of the genomic data
+genomes <- data_info$accession_no
+gene_loc <- c()
+for (i in 1:length(genomes)) {
+  gene_loc[i] <- system.file("extdata", paste0("genefiles/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+}
+
+data_info$gene_loc <- gene_loc
+```
+
+Now, you are ready to estimate the maximum growth rate.
+
+```{r, warning=FALSE}
+# estimate the maximum growth rate
+result <- Phydon(data_info)
+```
+
+```{r result, echo=FALSE}
+result
+```
