@@ -1,18 +1,29 @@
 ---
-title: "Estimating Maximum Growth Rates from Genomic Data with Phydon"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Estimating Maximum Growth Rates from Genomic Data with Phydon}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output: github_document
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
 )
 ```
+
+# Phydon
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+Estimating maximum growth rates of bacteria from genomic data with **Phydon**.
+
+# Introduction
+
+Phydon is a R package that estimates maximum growth rates of bacteria from genomic data. This package implements a method detailed in [Our paper](), which leverages phylogenetic signals and mechanistic statistics, specifically [codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details of this mechanistic method), to enhance the accuracy of growth rate estimations. By integrating these advanced techniques, Phydon provides a robust tool for microbial growth rate analysis based on genomic information.
 
 # Installation
 

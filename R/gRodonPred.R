@@ -15,6 +15,7 @@ gRodonpred <- function(gene_file, opt_temp) {
 
   ### check if the file exists
   if (!file.exists(CDS_file)) {
+    print("The CDS file does not exist. Trying to create it using sed ... ")
     # This part is not working for now as it requests the system to have sed and awk installed.
     sed_lind <- utils::capture.output(
       cat(
@@ -27,7 +28,7 @@ gRodonpred <- function(gene_file, opt_temp) {
     system(sed_lind, intern = TRUE)
     if (!file.exists(CDS_file)) {
       print(
-        "The CDS file does not exist. Please check https://microbialgamut.com/gRodon-vignette ."
+        "Creating failed. It might be due to that sed cannot be used, particularly on Windowns. Please check https://microbialgamut.com/gRodon-vignette to mannually generate CDS files."
       )
       stop("The CDS file does not exist.")
     }

@@ -19,29 +19,31 @@ get_phylo_distance <- function(genomes_to_est,
   ### This can be very computational expensive; To be parallelized
   species_genome_repgenome_df <- data.frame()
   for (genome_to_est in genomes_to_est) {
+    temp_df <- data.frame(
+      species = NA,
+      rep_genome = NA,
+      genome = genome_to_est
+    )
     for (i in 1:nrow(sp_clusters)) {
       # if genome_to_est is in the string of Clustered.genomes
       clustered_genomes <- sp_clusters[i, "Clustered.genomes"]
       if (genome_to_est %in% strsplit(clustered_genomes, ",")[[1]]) {
-        species_genome_repgenome_df <- rbind(
-          species_genome_repgenome_df,
-          data.frame(
-            species = sp_clusters[i, "GTDB.species"],
-            rep_genome = sp_clusters[i, "Representative.genome"],
-            genome = genome_to_est
-          )
-        )
+        temp_df$species <- sp_clusters[i, "GTDB.species"]
+        temp_df$rep_genome <- sp_clusters[i, "Representative.genome"]
         break
       }
     }
+    species_genome_repgenome_df <- rbind(
+      species_genome_repgenome_df,
+      temp_df
+    )
 
   }
 
-  if (nrow(species_genome_repgenome_df) == 0) {
-    return("The genome is not found in the GTDB database.")
-  }
+  unknown_genomes <- species_genome_repgenome_df[which(is.na(species_genome_repgenome_df$species)), ]
+  known_genomes <- species_genome_repgenome_df[which(!is.na(species_genome_repgenome_df$species)), ]
 
-  rep_genome <- species_genome_repgenome_df$rep_genome
+  rep_genome <- known_genomes$rep_genome
   # # if rep_genome in rep_genomes_database, return
   # if (all(rep_genome %in% rep_genomes_database)) {
   #   print("The representative genome is in the database, just run the training model.")
@@ -61,8 +63,8 @@ get_phylo_distance <- function(genomes_to_est,
   gtdb.subtree <- sub.gtdb.tree$subtree
 
   info_df <- data.frame()
-  for (i in 1:nrow(species_genome_repgenome_df)) {
-    single_rep_genome <- species_genome_repgenome_df$rep_genome[i]
+  for (i in 1:nrow(known_genomes)) {
+    single_rep_genome <- known_genomes$rep_genome[i]
     min_dist_test_train <-
       min(ape::cophenetic.phylo(gtdb.subtree)[single_rep_genome, rep_genomes_database])
 
@@ -76,9 +78,9 @@ get_phylo_distance <- function(genomes_to_est,
     info_df <- rbind(
       info_df,
       data.frame(
-        species = species_genome_repgenome_df$species[i],
+        species = known_genomes$species[i],
         rep_genome = single_rep_genome,
-        genome = species_genome_repgenome_df$genome[i],
+        genome = known_genomes$genome[i],
         neighbor_repgenome_train = neighbor_repgenome_train,
         phy_distance = min_dist_test_train
       )
@@ -86,8 +88,12 @@ get_phylo_distance <- function(genomes_to_est,
 
   }
 
+  if(nrow(unknown_genomes)>0){
+    unknown_genomes$neighbor_repgenome_train <- NA
+    unknown_genomes$phy_distance <- Inf
+  }
 
-
+  info_df <- rbind(info_df, unknown_genomes)
 
   if (!is.na(save_tree)) {
     # check if the folder output exists, if not, create it
