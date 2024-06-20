@@ -15,7 +15,7 @@ Phydon <- function(data_info_df,
   gtdb_tree <- get0("gtdb_tree", envir = asNamespace("Phydon"))
   sp_clusters <- get0("sp_clusters", envir = asNamespace("Phydon"))
   reg_model <- get0("reg_model", envir = asNamespace("Phydon"))
-
+  reg_model_tmp <- get0("reg_model_tmp", envir = asNamespace("Phydon"))
 
   ## check the length of species and the gene files
   genomes_to_est <- data_info_df$accession_no
