@@ -92,9 +92,9 @@ The columns are:
 - `accession_no`: the accession number of the genome that users want to
   predict the growth rate.
 
-- `Opt_temp`: **Optional**. This is used for gRodon predictions the
-  growth temperature of the genome. If not provided, the growth
-  temperature of the genome will be set to 20 degree Celsius.
+- `temp`: **Optional**. This is used for gRodon predictions the growth
+  temperature of the genome. If not provided, the growth temperature of
+  the genome will be set to 20 degree Celsius.
 
 <details>
 <summary>

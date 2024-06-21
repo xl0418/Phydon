@@ -1,11 +1,11 @@
 #' @title gRodonpred
 #' @description This function estimates the maximum growth rate of a species based on the gene sequences using gRodon package.
 #' @param gene_file The file that contains the gene sequences in fasta format.
-#' @param opt_temp The optimal growth temperature of the species. Default is 20.
+#' @param temp The optimal growth temperature of the species. Default is 20.
 #'
 #' @noRd
 
-gRodonpred <- function(gene_file, opt_temp) {
+gRodonpred <- function(gene_file, temp) {
   ### format in xxx.ffn
   genes <- Biostrings::readDNAStringSet(gene_file)
 
@@ -42,7 +42,7 @@ gRodonpred <- function(gene_file, opt_temp) {
   #Search for genes annotated as ribosomal proteins
   highly_expressed <- grepl("ribosomal protein", names(genes), ignore.case = T)
 
-  maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = opt_temp)
+  maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = temp)
 
   return(maxg$d)
 }
