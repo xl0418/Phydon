@@ -27,7 +27,8 @@ GTDB_tax_trait_repGenome_in_tree_expanded <- read.table(
 
 ## load the regression model
 load("data-raw/reg_model.RData")
+load("data-raw/reg_model_tmp.RData")
 # usethis::use_data(reg_model, overwrite = TRUE)
 
 
-usethis::use_data(gtdb_tree, sp_clusters, GTDB_tax_trait_repGenome_in_tree_expanded, reg_model, internal = TRUE)
+usethis::use_data(gtdb_tree, sp_clusters, GTDB_tax_trait_repGenome_in_tree_expanded, reg_model, reg_model_tmp, internal = TRUE, overwrite = TRUE)

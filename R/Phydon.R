@@ -1,21 +1,19 @@
 #' Estimate maximum growth rates/doubling time of species based on genomic data and phylogenetic history.
 #'
 #' @param data_info_df The data frame that contains the information of the genomes to be estimated. The first column should be the directory of the genomic data, i.e., xxx.ffn. The second column should be the accession number of genomes. The third column should be the optimal growth temperature. Default is 20.
-#' @param opt_temp The optimal growth temperature of the species. Default is 20.
 #' @return A data frame that contains the species name and the estimated maximum growth rates by three methods.
 #' @export
 
 
-Phydon <- function(data_info_df,
-                       opt_temp = 20) {
-
+Phydon <- function(data_info_df) {
   ## load the necessary data
   print("Loading internal data ...")
-  GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded", envir = asNamespace("Phydon"))
+  GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded",
+                                                    envir = asNamespace("Phydon"))
   gtdb_tree <- get0("gtdb_tree", envir = asNamespace("Phydon"))
   sp_clusters <- get0("sp_clusters", envir = asNamespace("Phydon"))
   reg_model <- get0("reg_model", envir = asNamespace("Phydon"))
-
+  reg_model_tmp <- get0("reg_model_tmp", envir = asNamespace("Phydon"))
 
   ## check the length of species and the gene files
   genomes_to_est <- data_info_df$accession_no
@@ -29,10 +27,10 @@ Phydon <- function(data_info_df,
 
   ## check if the third column exists
   if (ncol(data_info_df) == 3) {
-    opt_temps <- data_info_df$opt_temp
-    print("The optimal growth temperatures are provided.")
+    temps <- data_info_df$temp
+    print("The growth temperatures are provided.")
   } else {
-    print("The optimal growth temperatures are not provided. Default is 20.")
+    print("The growth temperatures are not provided.")
   }
 
   if (nrow(data_info_df) == 0) {
@@ -46,15 +44,17 @@ Phydon <- function(data_info_df,
 
   est_gRodon_df <- data.frame()
   ## Future feature to be implemented: Can be parallelized
-
+  print("Start gRodon predictions ...")
   ## gRodon estimates
   for (i in 1:nrow(data_info_df)) {
     gene_loc <- data_info_df$gene_loc[i]
     genome <- data_info_df$accession_no[i]
-    if (exists("opt_temps")) {
-      opt_temp <- opt_temps[i]
+    if (exists("temps")) {
+      temp <- temps[i]
+    } else {
+      temp <- "none"
     }
-    Est_gRodon <- gRodonpred(gene_loc, opt_temp = opt_temp)
+    Est_gRodon <- gRodonpred(gene_loc, temp = temp)
     est_gRodon_df <- rbind(est_gRodon_df,
                            data.frame(genome = genome, gRodonpred = Est_gRodon))
   }
@@ -62,6 +62,7 @@ Phydon <- function(data_info_df,
 
 
   ## phylopred estimates
+  print("Start phylopred predictions ...")
   prepare_for_genomes_to_est <- get_phylo_distance(
     genomes_to_est,
     gtdb_tree,
@@ -70,6 +71,12 @@ Phydon <- function(data_info_df,
   )
 
   rep_genomes_df <- prepare_for_genomes_to_est[[1]]
+  if ("temp" %in% colnames(data_info_df)) {
+    temp_info <- data_info_df[, c("accession_no", "temp")]
+    colnames(temp_info) <- c("genome", "temp")
+    rep_genomes_df <- merge(rep_genomes_df, temp_info, by = "genome")
+  }
+
   # deal with unkown species, only gRodon estimates are provided
   unknown <- rep_genomes_df[which(is.na(rep_genomes_df$species)), ]
 
@@ -87,11 +94,13 @@ Phydon <- function(data_info_df,
 
 
   ## combopred estimates
+  print("Start Phydon regression predictions ...")
   input_df <- merge(est_gRodon_df, phylopred_df, by = "genome")
-  combopred_df <- combopred(input_df, reg_model)
+
+  combopred_df <- combopred(input_df)
 
   ## rbind unknown species
-  if(nrow(unknown) > 0){
+  if (nrow(unknown) > 0) {
     unknown <- merge(est_gRodon_df, unknown, by = "genome")
     unknown$phylopred <- NA
     unknown$combopred <- NA
@@ -99,16 +108,30 @@ Phydon <- function(data_info_df,
   }
 
   ## rearrange the columns
-  combopred_df <- combopred_df[, c(
-    "genome",
-    "rep_genome",
-    "species",
-    "neighbor_repgenome_train",
-    "phy_distance",
-    "gRodonpred",
-    "phylopred",
-    "combopred"
-  )]
+  if ("temp" %in% colnames(data_info_df)) {
+    combopred_df <- combopred_df[, c(
+      "genome",
+      "rep_genome",
+      "species",
+      "neighbor_repgenome_train",
+      "phy_distance",
+      "temp",
+      "gRodonpred",
+      "phylopred",
+      "combopred"
+    )]
+  } else {
+    combopred_df <- combopred_df[, c(
+      "genome",
+      "rep_genome",
+      "species",
+      "neighbor_repgenome_train",
+      "phy_distance",
+      "gRodonpred",
+      "phylopred",
+      "combopred"
+    )]
+  }
 
   return(combopred_df)
 

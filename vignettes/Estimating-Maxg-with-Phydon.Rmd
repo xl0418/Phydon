@@ -61,7 +61,7 @@ for (i in 1:length(genomes)) {
   gene_loc[i] <- system.file("extdata", paste0("genefiles/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
 }
 data_info$gene_loc <- gene_loc
-
+data_info$temp <- sample(nrow(data_info))
 
 # estimate the maximum growth rate
 result <- Phydon(data_info)
@@ -78,7 +78,7 @@ The columns are:
 
 -   `accession_no`: the accession number of the genome that users want to predict the growth rate.
 
--   `Opt_temp`: **Optional**. This is used for gRodon predictions the growth temperature of the genome. If not provided, the growth temperature of the genome will be set to 20 degree Celsius.
+-   `temp`: **Optional**. This is used for gRodon predictions the growth temperature of the genome. If not provided, the growth temperature of the genome will be set to 20 degree Celsius.
 
 <details>
 
