@@ -15,12 +15,18 @@ PhloPred <- function(rep_genomes_to_est,
     ),
     unique(rep_genomes_to_est)
   )
+  train_rep_genomes <- intersect(
+    train_rep_genomes,
+    phydis_tree$tip.label
+  )
+
+
   known_traits <-
     GTDB_tax_trait_repGenome_in_tree_expanded[which(
       GTDB_tax_trait_repGenome_in_tree_expanded$Representative.genome %in% train_rep_genomes
     ), c("Representative.genome", "doubling_h")]
   # unique train_rep_genomes by Representative.genome and doubling_h
-  known_traits <- unique(known_traits)
+  known_traits <- unique(known_traits, by = c("Representative.genome", "doubling_h"))
 
   known_traits_vec <- known_traits$doubling_h
   names(known_traits_vec) <- known_traits$Representative.genome

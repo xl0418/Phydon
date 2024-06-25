@@ -1,7 +1,7 @@
 #' @title gRodonpred
 #' @description This function estimates the maximum growth rate of a species based on the gene sequences using gRodon package.
 #' @param gene_file The file that contains the gene sequences in fasta format.
-#' @param temp The optimal growth temperature of the species. Default is 20.
+#' @param temp The growth temperature of the species.
 #'
 #' @noRd
 

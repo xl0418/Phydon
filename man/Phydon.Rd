@@ -4,10 +4,12 @@
 \alias{Phydon}
 \title{Estimate maximum growth rates/doubling time of species based on genomic data and phylogenetic history.}
 \usage{
-Phydon(data_info_df)
+Phydon(data_info_df, user_tree = NULL)
 }
 \arguments{
-\item{data_info_df}{The data frame that contains the information of the genomes to be estimated. The first column should be the directory of the genomic data, i.e., xxx.ffn. The second column should be the accession number of genomes. The third column should be the optimal growth temperature. Default is 20.}
+\item{data_info_df}{The data frame that contains the information of the genomes to be estimated. The first column should be the directory of the genomic data, i.e., xxx.ffn. The second column should be the accession number of genomes. Or genome names if user provides phylogenetic tree. The third column should be the optimal growth temperature.}
+
+\item{user_tree}{The user-provided phylogenetic tree. It can be obtained by running gtdbtk on users' genomes and generated under the foler "/output/classify/". If not provided (user_tree = NULL), the user is supposed to provide the accession number of the genomes. Default is NULL.}
 }
 \value{
 A data frame that contains the species name and the estimated maximum growth rates by three methods.
