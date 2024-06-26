@@ -54,14 +54,22 @@ devtools::install_github("jlw-ecoevo/gRodon2")
 
 # Usage
 
+Phydon is designed to be user-friendly. The package provides **two modes** for users to estimate the maximum growth rates of bacteria.
+
+-  **Identified genomes**: Users' genomes are identified in the GTDB database and assigned with accession numbers. In this case, Phydon will search for the representative genomes of the species that the users' genomes belong to and use the phylogenetic information and gRodon to enhance the growth rate predictions.
+
+-  **Unidentified genomes**: Users' genomes are not identified in the GTDB database. In this case, user needs to provide a phylogeny tree that contains the users' genomes and the representative genomes in the GTDB database. Phydon will compute the phylogenetic distance of users' genome to the training data and estimate the maximum growth rates.
+
+## Identified genomes
+
 ## Minimal example
 
-Phydon is super user friendly. With an internal data, a minimal example is as simple as:
+When users' genomes are identified, the argument `user_tree` is not needed and is set to `NULL` by default. A minimal example illustrate how to use Phydon is as follows:
 
-```{r setup, warning=FALSE, eval=FALSE}
+```{r setup1, warning=FALSE, eval=FALSE}
 library(Phydon)
 # load the example data
-data_info <- read.csv(system.file("extdata", "data_info.csv", package = "Phydon"))
+data_info <- read.csv(system.file("extdata", "known.csv", package = "Phydon"))
 
 #### To get the directory of the genomic data  ####
 #### This is only for internal data as directory of genomic data is ad hoc per user's system ####
@@ -69,7 +77,7 @@ data_info <- read.csv(system.file("extdata", "data_info.csv", package = "Phydon"
 genomes <- data_info$accession_no
 gene_loc <- c()
 for (i in 1:length(genomes)) {
-  gene_loc[i] <- system.file("extdata", paste0("genefiles/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+  gene_loc[i] <- system.file("extdata", paste0("known/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
 }
 data_info$gene_loc <- gene_loc
 
@@ -89,7 +97,7 @@ The columns are:
 
 -   `accession_no`: the accession number of the genome that users want to predict the growth rate.
 
--   `temp`: **Optional**. This is used for gRodon predictions the growth temperature of the genome. If not provided, the growth temperature of the genome will be set to 20 degree Celsius.
+-   `temp`: **Optional**. This is used for gRodon predictions. If not provided, gRodon will not consider temperature in the predictions.
 
 <details>
 
@@ -97,24 +105,27 @@ The columns are:
 
 | gene_loc | accession_no |
 | --- | --- |
-| genefiles/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 |
-| genefiles/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 |
-| genefiles/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | RS_GCF_002906655.1 |
-| genefiles/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | RS_GCF_003026105.1 |
-| genefiles/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | RS_GCF_003026475.1 |
-| genefiles/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | RS_GCF_003026815.1 |
-| genefiles/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | RS_GCF_003144035.1 |
-| genefiles/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 |
-| genefiles/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 |
-| genefiles/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 |
+| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 |
+| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 |
+| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | RS_GCF_002906655.1 |
+| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | RS_GCF_003026105.1 |
+| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | RS_GCF_003026475.1 |
+| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | RS_GCF_003026815.1 |
+| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | RS_GCF_003144035.1 |
+| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 |
+| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 |
+| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 |
 
 </details>
+
+> [!Note]\
+> The second argument `user_tree` is not needed in this case. Phydon will search for the representative genomes of the species that the users' genomes belong to and use the phylogenetic information and gRodon to enhance the growth rate predictions.
 
 ## Output
 
 The output of Phydon is a data frame that contains the following columns:
 
--   `genome`: the accession number of the genome that users want to predict the growth rate
+-   `genome`: the accession number of the genome that users aim to predict the growth rate
 
 -   `rep_genome`: the representative genome of the species that the genome belongs to based on GTDB database; If it is NA, no matched representative genomes are found. The genome will be treated as a single species outside of the GTDB database.In this case, only gRodon predictions will be used. (See example result)
 
@@ -147,17 +158,73 @@ The output of Phydon is a data frame that contains the following columns:
 | RS_GCF_003544875.1 | RS_GCF_003544875.1 | s\_\_Vibrio alfacsensis | RS_GCF_900460535.1 | 0.03506859 | 0.6234453 | 0.2783264 | 0.2783264 |
 | RS_GCF_003716875.1 | RS_GCF_003716875.1 | s\_\_Vibrio zhugei | RS_GCF_000621645.1 | 0.18306980 | 0.6364132 | 0.4697509 | 0.4697509 |
 | RS_GCF_900130105.1 | RS_GCF_024346755.1 | s\_\_Vibrio aerogenes | RS_GCF_900460535.1 | 0.17884206 | 1.6145463 | 0.5057288 | 0.5057288 |
-| RS_GCF_102749895.1 | NA | NA | NA | Inf | 1.1346118 | NA | NA |
 
 </details>
 
-> [!Note]\
-> The last genome `RS_GCF_102749895.1` was made up on purpose to show the case when the genome is not in the GTDB database. In this case, the representative genome and species will be NA, and the phylogenetic distance will be Inf. The gRodon predictions will be used for this genome.
+## Unidentified genomes
 
-# Before you start, annotating genomes
+## Minimal example
+
+When users' genomes are not identified, the argument `user_tree` is needed. A minimal example illustrate how to use Phydon is as follows:
+
+```{r setup2, warning=FALSE, eval=FALSE}
+library(Phydon)
+# load the example data
+data_info <- read.csv(system.file("extdata", "unknown.csv", package = "Phydon"))
+user_tree <- ape::read.tree(system.file("extdata", "usertree.tree", package = "Phydon"))
+
+#### To get the directory of the genomic data  ####
+#### This is only for internal data as directory of genomic data is ad hoc per user's system ####
+#### For user's input data, see below for details ####
+genomes <- data_info$accession_no
+gene_loc <- c()
+for (i in 1:length(genomes)) {
+  gene_loc[i] <- system.file("extdata", paste0("unknown/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+}
+data_info$gene_loc <- gene_loc
+
+
+# estimate the maximum growth rate
+result <- Phydon(data_info, user_tree)
+
+
+```
+
+## Input data structure
+
+The input data requires a data frame that contains the following columns:
+
+The columns are:
+
+-   `gene_loc`: the directory of the annotated genomic data. The annotated genomes should be named after genome names. For example, the ffn and gff files should be named as `user_genome1.ffn` and `user_genome1.gff`.
+
+-   `accession_no`: the genome names. For example, `user_genome1`.
+
+-   `temp`: **Optional**. This is used for gRodon predictions. If not provided, gRodon will not consider temperature in the predictions.
+
+## Output data structure
+
+The output of Phydon is the same as the case of identified genomes. The only difference is that the `species` columns will be `NA` as the accession numbers are not given.
+
+
+# Before you start
+
+## Unidentified genomes
 
 > [!IMPORTANT]\
-> As gRodon requires annotated genomes, users need to annotate the genomes before using Phydon. We recommend using [Prokka](https://github.com/tseemann/prokka) for genome annotation. Thus, the directory structure of the genomic data should be like this:
+> When users' genomes are not identified, users need to provide a phylogenetic tree that contains the users' genomes and the representative genomes in the GTDB database. This process can be done by using the [GTDBTK](https://ecogenomics.github.io/GTDBTk/index.html). The phylogenetic tree can be obtained by running [`classify_wf`](https://ecogenomics.github.io/GTDBTk/commands/classify_wf.html) command on users' genomes:
+
+```
+gtdbtk classify_wf --skip_ani_screen --genome_dir /path/to/genomes --out_dir /output/
+```
+> [!IMPORTANT]\
+> The phylogenetic tree will be generated under the foler `/output/classify/`. It is usually named as `gtdbtk.bac120.classify.tree.1.tree`. Users then need to use this tree as the input of Phydon.
+
+
+## General requirements for both modes
+
+> [!IMPORTANT]\
+> For both modes, as gRodon requires annotated genomes, users need to annotate the genomes before using Phydon. We recommend using [Prokka](https://github.com/tseemann/prokka) for genome annotation. Thus, the directory structure of the genomic data should be like this:
 
 -   `genefiles/`
     -   `genome1/`
@@ -179,9 +246,21 @@ The output of Phydon is a data frame that contains the following columns:
 
 # The basic workflow
 
+## Unidentified genomes
+
+1. Generate the phylogenetic tree `user_tree` using GTDBTK `classify_wf`.
+
+2.  Annotate the genomes using Prokka and obtain `.ffn` and `.gff` files. Optionally, generate the `genome1_CDS_names.txt` file. Not necessary if you run Phydon in Linux or MacOS.
+
+3.  Organize the genomic data in the `genefiles/` directory and generate `data_info.csv` file in the structure abovementioned.
+
+4.  Run Phydon with the `data_info.csv` file and the `user_tree`.
+
+## Identified genomes
+
 1.  Annotate the genomes using Prokka and obtain `.ffn` and `.gff` files. Optionally, generate the `genome1_CDS_names.txt` file. Not necessary if you run Phydon in Linux or MacOS.
 
-2.  Organize the genomic data in the `genefiles/` directory and generate `data_info.csv` file.
+2.  Organize the genomic data in the `genefiles/` directory and generate `data_info.csv` file in the structure abovementioned..
 
 3.  Run Phydon with the `data_info.csv` file.
 
