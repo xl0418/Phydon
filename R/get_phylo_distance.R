@@ -22,71 +22,87 @@ get_phylo_distance <- function(genomes_to_est,
     ### This can be very computational expensive; To be parallelized
     species_genome_repgenome_df <- data.frame()
     for (genome_to_est in genomes_to_est) {
+      temp_df <- data.frame(
+        species = NA,
+        rep_genome = NA,
+        genome = genome_to_est
+      )
       for (i in 1:nrow(sp_clusters)) {
         # if genome_to_est is in the string of Clustered.genomes
         clustered_genomes <- sp_clusters[i, "Clustered.genomes"]
         if (genome_to_est %in% strsplit(clustered_genomes, ",")[[1]]) {
-          temp_df <- data.frame(
-            species = sp_clusters[i, "GTDB.species"],
-            rep_genome = sp_clusters[i, "Representative.genome"],
-            genome = genome_to_est
-          )
+          temp_df$species = sp_clusters[i, "GTDB.species"]
+          temp_df$rep_genome = sp_clusters[i, "Representative.genome"]
 
-          species_genome_repgenome_df <- rbind(
-            species_genome_repgenome_df,
-            temp_df
-          )
           break
         }
+
       }
-
-
-    }
-
-    if(length(genomes_to_est) != nrow(species_genome_repgenome_df)){
-      missing_genomes <- genomes_to_est[!(genomes_to_est %in% species_genome_repgenome_df$genome)]
-      stop(paste0("Some species are not found in the GTDB database. Please check the accession numbers: ", paste(missing_genomes, collapse = ", ")))
-    }
-
-    rep_genome <- species_genome_repgenome_df$rep_genome
-
-    all_rep_genomes <- unique(c(rep_genomes_database, rep_genome))
-
-
-    rep_genomes_intree <- inputtree$tip.label
-    # get the intersection of matched_genomes and rep_genomes_intree
-    matched_genomes <- intersect(all_rep_genomes, rep_genomes_intree)
-
-
-    sub.gtdb.tree <-
-      castor::get_subtree_with_tips(inputtree, only_tips = matched_genomes)
-    gtdb.subtree <- sub.gtdb.tree$subtree
-
-    info_df <- data.frame()
-    for (i in 1:nrow(species_genome_repgenome_df)) {
-      single_rep_genome <- species_genome_repgenome_df$rep_genome[i]
-      min_dist_test_train <-
-        min(ape::cophenetic.phylo(gtdb.subtree)[single_rep_genome, rep_genomes_database])
-
-      # the index of the minimum distance
-      index_min_dist <-
-        which(ape::cophenetic.phylo(gtdb.subtree)[single_rep_genome, rep_genomes_database] == min_dist_test_train)
-
-      neighbor_repgenome_train <-
-        unique(rep_genomes_database[index_min_dist])
-
-      info_df <- rbind(
-        info_df,
-        data.frame(
-          species = species_genome_repgenome_df$species[i],
-          rep_genome = single_rep_genome,
-          genome = species_genome_repgenome_df$genome[i],
-          neighbor_repgenome_train = neighbor_repgenome_train,
-          phy_distance = min_dist_test_train
-        )
+      species_genome_repgenome_df <- rbind(
+        species_genome_repgenome_df,
+        temp_df
       )
 
+
     }
+
+    unknown_genomes <- species_genome_repgenome_df[is.na(species_genome_repgenome_df$species),]
+
+    species_genome_repgenome_df <- species_genome_repgenome_df[!is.na(species_genome_repgenome_df$species),]
+    info_df <- data.frame()
+    if(nrow(species_genome_repgenome_df) > 0){
+      rep_genome <- species_genome_repgenome_df$rep_genome
+
+      all_rep_genomes <- unique(c(rep_genomes_database, rep_genome))
+
+
+      rep_genomes_intree <- inputtree$tip.label
+      # get the intersection of matched_genomes and rep_genomes_intree
+      matched_genomes <- intersect(all_rep_genomes, rep_genomes_intree)
+
+
+      sub.gtdb.tree <-
+        castor::get_subtree_with_tips(inputtree, only_tips = matched_genomes)
+      gtdb.subtree <- sub.gtdb.tree$subtree
+
+
+      for (i in 1:nrow(species_genome_repgenome_df)) {
+        single_rep_genome <- species_genome_repgenome_df$rep_genome[i]
+        min_dist_test_train <-
+          min(ape::cophenetic.phylo(gtdb.subtree)[single_rep_genome, rep_genomes_database])
+
+        # the index of the minimum distance
+        index_min_dist <-
+          which(ape::cophenetic.phylo(gtdb.subtree)[single_rep_genome, rep_genomes_database] == min_dist_test_train)
+
+        neighbor_repgenome_train <-
+          unique(rep_genomes_database[index_min_dist])
+
+        info_df <- rbind(
+          info_df,
+          data.frame(
+            species = species_genome_repgenome_df$species[i],
+            rep_genome = single_rep_genome,
+            genome = species_genome_repgenome_df$genome[i],
+            neighbor_repgenome_train = neighbor_repgenome_train,
+            phy_distance = min_dist_test_train
+          )
+        )
+
+      }
+    }
+
+
+    # info_df for unknown genomes
+    unknown_info_df <- data.frame(
+      species = NA,
+      rep_genome = NA,
+      genome = unknown_genomes$genome,
+      neighbor_repgenome_train = NA,
+      phy_distance = NA
+    )
+
+    info_df <- rbind(info_df, unknown_info_df)
 
     if (!is.na(save_tree)) {
       # check if the folder output exists, if not, create it

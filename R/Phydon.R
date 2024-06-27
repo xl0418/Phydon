@@ -69,12 +69,19 @@ Phydon <- function(data_info_df, user_tree = NULL) {
 
   # for known species, both gRodon and phylopred estimates are provided
   rep_genomes_to_est <- unique(rep_genomes_df$rep_genome)
-  phydis_tree <- prepare_for_genomes_to_est[[2]]
-  Est_phylopred <- PhloPred(rep_genomes_to_est,
-                            GTDB_tax_trait_repGenome_in_tree_expanded,
-                            phydis_tree)
+  rep_genomes_to_est <- rep_genomes_to_est[!is.na(rep_genomes_to_est)]
+  if(length(rep_genomes_to_est) == 0){
+    phylopred_df <- rep_genomes_df
+    phylopred_df$phylopred <- NA
+  } else {
+    phydis_tree <- prepare_for_genomes_to_est[[2]]
+    Est_phylopred <- PhloPred(rep_genomes_to_est,
+                              GTDB_tax_trait_repGenome_in_tree_expanded,
+                              phydis_tree)
 
-  phylopred_df <- merge(rep_genomes_df, Est_phylopred, by = "rep_genome")
+    phylopred_df <- merge(rep_genomes_df, Est_phylopred, by = "rep_genome", all = TRUE)
+  }
+
 
 
   ## Future feature to be implemented: Can be parallelized
