@@ -50,6 +50,7 @@ get_phylo_distance <- function(genomes_to_est,
 
     species_genome_repgenome_df <- species_genome_repgenome_df[!is.na(species_genome_repgenome_df$species),]
     info_df <- data.frame()
+    gtdb.subtree <- NULL
     if(nrow(species_genome_repgenome_df) > 0){
       rep_genome <- species_genome_repgenome_df$rep_genome
 
@@ -93,16 +94,20 @@ get_phylo_distance <- function(genomes_to_est,
     }
 
 
-    # info_df for unknown genomes
-    unknown_info_df <- data.frame(
-      species = NA,
-      rep_genome = NA,
-      genome = unknown_genomes$genome,
-      neighbor_repgenome_train = NA,
-      phy_distance = NA
-    )
+    if (nrow(unknown_genomes) > 0){
+      # info_df for unknown genomes
+      unknown_info_df <- data.frame(
+        species = NA,
+        rep_genome = NA,
+        genome = unknown_genomes$genome,
+        neighbor_repgenome_train = NA,
+        phy_distance = NA
+      )
+      info_df <- rbind(info_df, unknown_info_df)
 
-    info_df <- rbind(info_df, unknown_info_df)
+    }
+
+
 
     if (!is.na(save_tree)) {
       # check if the folder output exists, if not, create it

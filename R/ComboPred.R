@@ -8,11 +8,15 @@
 combopred <- function(input_df) {
   # find the rows with any of gRodonpred, phy_)distance, or phylopred is missing
   missing_rows <- which(is.na(input_df$gRodonpred) | is.na(input_df$phy_distance) | is.na(input_df$phylopred))
-  input_df_missing <- input_df[missing_rows,]
-  input_df_missing$combopred <- NA
+  if (length(missing_rows) > 0) {
+    input_df_missing <- input_df[missing_rows,]
+    input_df_missing$combopred <- NA
+    # find the rows with all of gRodonpred, phy_)distance, and phylopred are not missing
+    input_df <- input_df[-missing_rows,]
+  }
 
-  # find the rows with all of gRodonpred, phy_)distance, and phylopred are not missing
-  input_df <- input_df[-missing_rows,]
+
+
   if(nrow(input_df) > 0) {
     test_data <- data.frame(log_gRodon = log(input_df$gRodonpred),
                             phy_distance = input_df$phy_distance)
@@ -26,7 +30,10 @@ combopred <- function(input_df) {
     input_df$combopred <- input_df$gRodonpred * (test_data$pred_fitted) + input_df$phylopred * (1 - test_data$pred_fitted)
   }
 
-  input_df <- rbind(input_df, input_df_missing)
+  if (length(missing_rows) > 0) {
+    input_df <- rbind(input_df, input_df_missing)
+  }
+
 
   return(input_df)
 
