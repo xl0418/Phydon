@@ -140,17 +140,16 @@ What the input file looks like
 | known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 |
 | known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 |
 | known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 |
-
-known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn \| 1 \|  
-known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn \| 2 \|  
-known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn \| 3 \|  
-known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn \| 4 \|  
-known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn \| 5 \|  
-known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn \| 6 \|  
-known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn \| 7 \|  
-known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn \| 8 \|  
-known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn \| 9 \|  
-known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn \| 10 \|
+| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | 1                  |
+| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | 2                  |
+| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | 3                  |
+| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | 4                  |
+| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | 5                  |
+| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | 6                  |
+| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | 7                  |
+| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | 8                  |
+| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | 9                  |
+| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | 10                 |
 
 </details>
 
