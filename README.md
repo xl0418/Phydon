@@ -90,6 +90,11 @@ for (i in 1:length(genomes)) {
 }
 data_info$gene_loc <- gene_loc
 
+# Generate some genomes with user picked names.
+# The genome sequences are provided.
+# In this case, only gRodon estimation will be used.
+data_info <- rbind(data_info, data.frame(gene_loc = data_info$gene_loc, accession_no = c(1:10)))
+
 
 # estimate the maximum growth rate
 result <- Phydon(data_info)
@@ -108,7 +113,12 @@ The columns are:
   `RS_GCF_000024245.1` should be named as `RS_GCF_000024245.1.ffn`.
 
 - `accession_no`: the accession number of the genome that users want to
-  predict the growth rate.
+  predict the growth rate. In this mode, the accession number is
+  expected to be in the GTDB database. If the accession number is not in
+  the GTDB database, Phydon will treat the genome as a single species
+  outside of the GTDB database. In this case, only gRodon predictions
+  will be used and other predictions will be set to `NA`. See the
+  example code.
 
 - `temp`: **Optional**. This is used for gRodon predictions. If not
   provided, gRodon will not consider temperature in the predictions.
@@ -130,6 +140,17 @@ What the input file looks like
 | known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 |
 | known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 |
 | known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 |
+
+known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn \| 1 \|  
+known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn \| 2 \|  
+known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn \| 3 \|  
+known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn \| 4 \|  
+known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn \| 5 \|  
+known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn \| 6 \|  
+known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn \| 7 \|  
+known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn \| 8 \|  
+known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn \| 9 \|  
+known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn \| 10 \|
 
 </details>
 
@@ -192,6 +213,16 @@ What ‘result’ looks like
 | RS_GCF_003544875.1 | RS_GCF_003544875.1 | s\_\_Vibrio alfacsensis         | RS_GCF_900460535.1       | 0.03506859   | 0.6234453  | 0.2783264 | 0.2783264 |
 | RS_GCF_003716875.1 | RS_GCF_003716875.1 | s\_\_Vibrio zhugei              | RS_GCF_000621645.1       | 0.18306980   | 0.6364132  | 0.4697509 | 0.4697509 |
 | RS_GCF_900130105.1 | RS_GCF_024346755.1 | s\_\_Vibrio aerogenes           | RS_GCF_900460535.1       | 0.17884206   | 1.6145463  | 0.5057288 | 0.5057288 |
+| 1                  | NA                 | NA                              | NA                       | NA           | 1.1346118  | NA        | NA        |
+| 2                  | NA                 | NA                              | NA                       | NA           | 0.4913568  | NA        | NA        |
+| 3                  | NA                 | NA                              | NA                       | NA           | 0.7658604  | NA        | NA        |
+| 4                  | NA                 | NA                              | NA                       | NA           | 1.5986925  | NA        | NA        |
+| 5                  | NA                 | NA                              | NA                       | NA           | 1.4924976  | NA        | NA        |
+| 6                  | NA                 | NA                              | NA                       | NA           | 0.7407403  | NA        | NA        |
+| 7                  | NA                 | NA                              | NA                       | NA           | 0.6097861  | NA        | NA        |
+| 8                  | NA                 | NA                              | NA                       | NA           | 0.6234453  | NA        | NA        |
+| 9                  | NA                 | NA                              | NA                       | NA           | 0.6364132  | NA        | NA        |
+| 10                 | NA                 | NA                              | NA                       | NA           | 1.6145463  | NA        | NA        |
 
 </details>
 
