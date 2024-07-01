@@ -56,9 +56,9 @@ devtools::install_github("jlw-ecoevo/gRodon2")
 
 Phydon is designed to be user-friendly. The package provides **two modes** for users to estimate the maximum growth rates of bacteria.
 
--  **Identified genomes**: Users' genomes are identified in the GTDB database and assigned with accession numbers. In this case, Phydon will search for the representative genomes of the species that the users' genomes belong to and use the phylogenetic information and gRodon to enhance the growth rate predictions.
+-   **Identified genomes**: Users' genomes are identified in the GTDB database and assigned with accession numbers. In this case, Phydon will search for the representative genomes of the species that the users' genomes belong to and use the phylogenetic information and gRodon to enhance the growth rate predictions.
 
--  **Unidentified genomes**: Users' genomes are not identified in the GTDB database. In this case, user needs to provide a phylogeny tree that contains the users' genomes and the representative genomes in the GTDB database. Phydon will compute the phylogenetic distance of users' genome to the training data and estimate the maximum growth rates.
+-   **Unidentified genomes**: Users' genomes are not identified in the GTDB database. In this case, user needs to provide a phylogeny tree that contains the users' genomes and the representative genomes in the GTDB database. Phydon will compute the phylogenetic distance of users' genome to the training data and estimate the maximum growth rates.
 
 ## Identified genomes
 
@@ -100,7 +100,7 @@ The columns are:
 
 -   `gene_loc`: the directory of the annotated genomic data. The fasta file should be named as the accession number of the genome. For example, the fasta file of the genome with the accession number `RS_GCF_000024245.1` should be named as `RS_GCF_000024245.1.ffn`.
 
--   `accession_no`: the accession number of the genome that users want to predict the growth rate. In this mode, the accession number is expected to be in the GTDB database. If the accession number is not in the GTDB database, Phydon will treat the genome as a single species outside of the GTDB database. In this case, only gRodon predictions will be used and other predictions will be set to `NA`. See the example code. 
+-   `accession_no`: the accession number of the genome that users want to predict the growth rate. In this mode, the accession number is expected to be in the GTDB database. If the accession number is not in the GTDB database, Phydon will treat the genome as a single species outside of the GTDB database. In this case, only gRodon predictions will be used and other predictions will be set to `NA`. See the example code.
 
 -   `temp`: **Optional**. This is used for gRodon predictions. If not provided, gRodon will not consider temperature in the predictions.
 
@@ -108,8 +108,8 @@ The columns are:
 
 <summary>What the input file looks like</summary>
 
-| gene_loc | accession_no |
-| --- | --- |
+| gene_loc                                        | accession_no       |
+|-------------------------------------------------|--------------------|
 | known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 |
 | known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 |
 | known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | RS_GCF_002906655.1 |
@@ -120,16 +120,16 @@ The columns are:
 | known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 |
 | known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 |
 | known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 |
-| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | 1 |
-| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | 2 |
-| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | 3 |
-| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | 4 |
-| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | 5 |
-| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | 6 |
-| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | 7 |
-| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | 8 |
-| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | 9 |
-| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | 10 |
+| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | 1                  |
+| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | 2                  |
+| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | 3                  |
+| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | 4                  |
+| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | 5                  |
+| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | 6                  |
+| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | 7                  |
+| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | 8                  |
+| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | 9                  |
+| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | 10                 |
 
 </details>
 
@@ -138,7 +138,7 @@ The columns are:
 
 ## Output
 
-The output of Phydon is a data frame that contains the following columns:
+The output of Phydon is a **data frame** that contains the following columns:
 
 -   `genome`: the accession number of the genome that users aim to predict the growth rate
 
@@ -160,30 +160,28 @@ The output of Phydon is a data frame that contains the following columns:
 
 <summary>What 'result' looks like</summary>
 
-
-| genome | rep_genome | species | neighbor_repgenome_train | phy_distance | gRodonpred | phylopred | combopred |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| RS_GCF_002749895.1 | RS_GCF_002749895.1 | s\_\_Vibrio fujianensis | RS_GCF_000621645.1 | 0.12220675 | 1.1346118 | 0.4697509 | 0.4697509 |
-| RS_GCF_002849855.1 | RS_GCF_002849855.1 | s\_\_Vibrio azureus | RS_GCF_900460535.1 | 0.05166449 | 0.4913568 | 0.2783264 | 0.2783264 |
-| RS_GCF_002906655.1 | RS_GCF_002906655.1 | s\_\_Vibrio hyugaensis | RS_GCF_900460535.1 | 0.03447402 | 0.7658604 | 0.2783264 | 0.2783264 |
-| RS_GCF_003026105.1 | RS_GCF_003026105.1 | s\_\_Photobacterium sp003026105 | RS_GCF_003025615.1 | 0.16585578 | 1.5986925 | 2.0439385 | 2.0439385 |
-| RS_GCF_003026475.1 | RS_GCF_003026475.1 | s\_\_Photobacterium lipolyticum | RS_GCF_003025615.1 | 0.08080289 | 1.4924976 | 1.8805498 | 1.8805498 |
-| RS_GCF_003026815.1 | RS_GCF_003026815.1 | s\_\_Photobacterium damselae | RS_GCF_003025615.1 | 0.15489320 | 0.7407403 | 2.0439385 | 2.0439385 |
-| RS_GCF_003144035.1 | RS_GCF_003144035.1 | s\_\_Vibrio albus | RS_GCF_900460535.1 | 0.15592277 | 0.6097861 | 0.8919112 | 0.8919112 |
-| RS_GCF_003544875.1 | RS_GCF_003544875.1 | s\_\_Vibrio alfacsensis | RS_GCF_900460535.1 | 0.03506859 | 0.6234453 | 0.2783264 | 0.2783264 |
-| RS_GCF_003716875.1 | RS_GCF_003716875.1 | s\_\_Vibrio zhugei | RS_GCF_000621645.1 | 0.18306980 | 0.6364132 | 0.4697509 | 0.4697509 |
-| RS_GCF_900130105.1 | RS_GCF_024346755.1 | s\_\_Vibrio aerogenes | RS_GCF_900460535.1 | 0.17884206 | 1.6145463 | 0.5057288 | 0.5057288 |
-| 1 | NA | NA | NA | NA | 1.1346118 | NA | NA |
-| 2 | NA | NA | NA | NA | 0.4913568 | NA | NA |
-| 3 | NA | NA | NA | NA | 0.7658604 | NA | NA |
-| 4 | NA | NA | NA | NA | 1.5986925 | NA | NA |
-| 5 | NA | NA | NA | NA | 1.4924976 | NA | NA |
-| 6 | NA | NA | NA | NA | 0.7407403 | NA | NA |
-| 7 | NA | NA | NA | NA | 0.6097861 | NA | NA |
-| 8 | NA | NA | NA | NA | 0.6234453 | NA | NA |
-| 9 | NA | NA | NA | NA | 0.6364132 | NA | NA |
-| 10 | NA | NA | NA | NA | 1.6145463 | NA | NA |
-
+| genome             | rep_genome         | species                         | neighbor_repgenome_train | phy_distance | gRodonpred | phylopred | combopred |
+|---------|---------|---------|---------|---------|---------|---------|---------|
+| RS_GCF_002749895.1 | RS_GCF_002749895.1 | s\_\_Vibrio fujianensis         | RS_GCF_000621645.1       | 0.12220675   | 1.1346118  | 0.4697509 | 0.4697509 |
+| RS_GCF_002849855.1 | RS_GCF_002849855.1 | s\_\_Vibrio azureus             | RS_GCF_900460535.1       | 0.05166449   | 0.4913568  | 0.2783264 | 0.2783264 |
+| RS_GCF_002906655.1 | RS_GCF_002906655.1 | s\_\_Vibrio hyugaensis          | RS_GCF_900460535.1       | 0.03447402   | 0.7658604  | 0.2783264 | 0.2783264 |
+| RS_GCF_003026105.1 | RS_GCF_003026105.1 | s\_\_Photobacterium sp003026105 | RS_GCF_003025615.1       | 0.16585578   | 1.5986925  | 2.0439385 | 2.0439385 |
+| RS_GCF_003026475.1 | RS_GCF_003026475.1 | s\_\_Photobacterium lipolyticum | RS_GCF_003025615.1       | 0.08080289   | 1.4924976  | 1.8805498 | 1.8805498 |
+| RS_GCF_003026815.1 | RS_GCF_003026815.1 | s\_\_Photobacterium damselae    | RS_GCF_003025615.1       | 0.15489320   | 0.7407403  | 2.0439385 | 2.0439385 |
+| RS_GCF_003144035.1 | RS_GCF_003144035.1 | s\_\_Vibrio albus               | RS_GCF_900460535.1       | 0.15592277   | 0.6097861  | 0.8919112 | 0.8919112 |
+| RS_GCF_003544875.1 | RS_GCF_003544875.1 | s\_\_Vibrio alfacsensis         | RS_GCF_900460535.1       | 0.03506859   | 0.6234453  | 0.2783264 | 0.2783264 |
+| RS_GCF_003716875.1 | RS_GCF_003716875.1 | s\_\_Vibrio zhugei              | RS_GCF_000621645.1       | 0.18306980   | 0.6364132  | 0.4697509 | 0.4697509 |
+| RS_GCF_900130105.1 | RS_GCF_024346755.1 | s\_\_Vibrio aerogenes           | RS_GCF_900460535.1       | 0.17884206   | 1.6145463  | 0.5057288 | 0.5057288 |
+| 1                  | NA                 | NA                              | NA                       | NA           | 1.1346118  | NA        | NA        |
+| 2                  | NA                 | NA                              | NA                       | NA           | 0.4913568  | NA        | NA        |
+| 3                  | NA                 | NA                              | NA                       | NA           | 0.7658604  | NA        | NA        |
+| 4                  | NA                 | NA                              | NA                       | NA           | 1.5986925  | NA        | NA        |
+| 5                  | NA                 | NA                              | NA                       | NA           | 1.4924976  | NA        | NA        |
+| 6                  | NA                 | NA                              | NA                       | NA           | 0.7407403  | NA        | NA        |
+| 7                  | NA                 | NA                              | NA                       | NA           | 0.6097861  | NA        | NA        |
+| 8                  | NA                 | NA                              | NA                       | NA           | 0.6234453  | NA        | NA        |
+| 9                  | NA                 | NA                              | NA                       | NA           | 0.6364132  | NA        | NA        |
+| 10                 | NA                 | NA                              | NA                       | NA           | 1.6145463  | NA        | NA        |
 
 </details>
 
@@ -197,6 +195,7 @@ When users' genomes are not identified, the argument `user_tree` is needed. A mi
 library(Phydon)
 # load the example data
 data_info <- read.csv(system.file("extdata", "unknown.csv", package = "Phydon"))
+# load the example tree
 user_tree <- ape::read.tree(system.file("extdata", "usertree.tree", package = "Phydon"))
 
 #### To get the directory of the genomic data  ####
@@ -218,9 +217,9 @@ result <- Phydon(data_info, user_tree)
 
 ## Input data structure
 
-The input data requires a data frame that contains the following columns:
+The input data requires a **data frame** and a **phylogenetic tree** that contains users genomes:
 
-The columns are:
+1. The data frame has the same columns as mentioned above:
 
 -   `gene_loc`: the directory of the annotated genomic data. The annotated genomes should be named after genome names. For example, the ffn and gff files should be named as `user_genome1.ffn` and `user_genome1.gff`.
 
@@ -228,10 +227,12 @@ The columns are:
 
 -   `temp`: **Optional**. This is used for gRodon predictions. If not provided, gRodon will not consider temperature in the predictions.
 
+2. The phylogenetic tree can be generated by using GTDBTK with the command `classify_wf`. See below **Before you start** for details!
+
+
 ## Output data structure
 
 The output of Phydon is the same as the case of identified genomes. The only difference is that the `species` columns will be `NA` as the accession numbers are not given.
-
 
 # Before you start
 
@@ -240,12 +241,12 @@ The output of Phydon is the same as the case of identified genomes. The only dif
 > [!IMPORTANT]\
 > When users' genomes are not identified, users need to provide a phylogenetic tree that contains the users' genomes and the representative genomes in the GTDB database. This process can be done by using the [GTDBTK](https://ecogenomics.github.io/GTDBTk/index.html). The phylogenetic tree can be obtained by running [`classify_wf`](https://ecogenomics.github.io/GTDBTk/commands/classify_wf.html) command on users' genomes:
 
-```
+```         
 gtdbtk classify_wf --skip_ani_screen --genome_dir /path/to/genomes --out_dir /output/
 ```
+
 > [!IMPORTANT]\
 > The phylogenetic tree will be generated under the foler `/output/classify/`. It is usually named as `gtdbtk.bac120.classify.tree.1.tree`. Users then need to use this tree as the input of Phydon.
-
 
 ## General requirements for both modes
 
@@ -274,7 +275,7 @@ gtdbtk classify_wf --skip_ani_screen --genome_dir /path/to/genomes --out_dir /ou
 
 ## Unidentified genomes
 
-1. Generate the phylogenetic tree `user_tree` using GTDBTK `classify_wf`.
+1.  Generate the phylogenetic tree `user_tree` using GTDBTK `classify_wf`.
 
 2.  Annotate the genomes using Prokka and obtain `.ffn` and `.gff` files. Optionally, generate the `genome1_CDS_names.txt` file. Not necessary if you run Phydon in Linux or MacOS.
 
@@ -289,6 +290,5 @@ gtdbtk classify_wf --skip_ani_screen --genome_dir /path/to/genomes --out_dir /ou
 2.  Organize the genomic data in the `genefiles/` directory and generate `data_info.csv` file in the structure abovementioned..
 
 3.  Run Phydon with the `data_info.csv` file.
-
 
 # Citation
