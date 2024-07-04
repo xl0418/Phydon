@@ -67,6 +67,12 @@ modes** for users to estimate the maximum growth rates of bacteria.
   GTDB database. Phydon will compute the phylogenetic distance of users’
   genome to the training data and estimate the maximum growth rates.
 
+## Bacteria and Archaea
+
+Phydon supports both bacteria and archaea. Users can specify the taxon
+by setting the argument `tax` to either `bacteria` or `archaea`. The
+default is `bacteria`.
+
 ## Identified genomes
 
 ## Minimal example

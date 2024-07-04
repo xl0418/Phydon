@@ -2,19 +2,35 @@
 #'
 #' @param data_info_df The data frame that contains the information of the genomes to be estimated. The first column should be the directory of the genomic data, i.e., xxx.ffn. The second column should be the accession number of genomes. Or genome names if user provides phylogenetic tree. The third column should be the optimal growth temperature.
 #' @param user_tree The user-provided phylogenetic tree. It can be obtained by running gtdbtk on users' genomes and generated under the foler "/output/classify/". If not provided (user_tree = NULL), the user is supposed to provide the accession number of the genomes. Default is NULL.
+#' @param tax The taxon of the species. It can be "bacteria" or "archaea". Default is "bacteria".
 #' @return A data frame that contains the species name and the estimated maximum growth rates by three methods.
 #' @export
 
 
-Phydon <- function(data_info_df, user_tree = NULL) {
+Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria") {
   ## load the necessary data
+  if (tax == "bacteria") {
+    print("Estimating maximum growth rates for bacteria ...")
+    GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded",
+                                                      envir = asNamespace("Phydon"))
+    gtdb_tree <- get0("gtdb_tree", envir = asNamespace("Phydon"))
+    sp_clusters <- get0("sp_clusters", envir = asNamespace("Phydon"))
+    reg_model <- get0("reg_model", envir = asNamespace("Phydon"))
+    reg_model_tmp <- get0("reg_model_tmp", envir = asNamespace("Phydon"))
+  } else if (tax == "archaea") {
+    print("Estimating maximum growth rates for archaea ...")
+    GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded_archaea",
+                                                      envir = asNamespace("Phydon"))
+    gtdb_tree <- get0("gtdb_tree_archaea", envir = asNamespace("Phydon"))
+    sp_clusters <- get0("sp_clusters", envir = asNamespace("Phydon"))
+    reg_model <- get0("reg_model_archaea", envir = asNamespace("Phydon"))
+    reg_model_tmp <- get0("reg_model_tmp_archaea", envir = asNamespace("Phydon"))
+
+  } else {
+    return("The taxon is not supported.")
+  }
   print("Loading internal data ...")
-  GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded",
-                                                    envir = asNamespace("Phydon"))
-  gtdb_tree <- get0("gtdb_tree", envir = asNamespace("Phydon"))
-  sp_clusters <- get0("sp_clusters", envir = asNamespace("Phydon"))
-  reg_model <- get0("reg_model", envir = asNamespace("Phydon"))
-  reg_model_tmp <- get0("reg_model_tmp", envir = asNamespace("Phydon"))
+
 
   if (!is.null(user_tree)) {
     print("Phylogenetic tree is provided. Phylogenetic distance of genomes will be calculated based on the tree ...")

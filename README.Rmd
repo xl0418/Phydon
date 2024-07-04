@@ -60,6 +60,11 @@ Phydon is designed to be user-friendly. The package provides **two modes** for u
 
 -   **Unidentified genomes**: Users' genomes are not identified in the GTDB database. In this case, user needs to provide a phylogeny tree that contains the users' genomes and the representative genomes in the GTDB database. Phydon will compute the phylogenetic distance of users' genome to the training data and estimate the maximum growth rates.
 
+## Bacteria and Archaea
+
+Phydon supports both bacteria and archaea. Users can specify the taxon by setting the argument `tax` to either `bacteria` or `archaea`. The default is `bacteria`.
+
+
 ## Identified genomes
 
 ## Minimal example
