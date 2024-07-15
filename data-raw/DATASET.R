@@ -8,10 +8,13 @@ gtdb_tree_archaea <- ape::read.tree(paste0("data-raw/ar53_r220.tree"))
 
 
 ## load the clustered genome information
-sp_clusters <- read.table(paste0("data-raw/sp_clusters_r220.tsv"),
+sp_clusters_bac <- read.table(paste0("data-raw/sp_clusters_r220_bac.tsv"),
                           header = T,
                           sep = "\t")
-sp_clusters <- sp_clusters[, c("Representative.genome", "GTDB.species", "Clustered.genomes")]
+sp_clusters_arc <- read.table(paste0("data-raw/sp_clusters_r220_arc.tsv"),
+                              header = T,
+                              sep = "\t")
+# sp_clusters <- sp_clusters[, c("Representative.genome", "GTDB.species", "Clustered.genomes")]
 # usethis::use_data(sp_clusters, overwrite = TRUE)
 
 
@@ -38,7 +41,8 @@ load("data-raw/reg_model_tmp_archaea.RData")
 
 usethis::use_data(
   gtdb_tree,
-  sp_clusters,
+  sp_clusters_bac,
+  sp_clusters_arc,
   GTDB_tax_trait_repGenome_in_tree_expanded,
   reg_model,
   reg_model_tmp,
