@@ -278,6 +278,15 @@ library(doParallel)
 
 ### read the data
 data_info <- read.csv(system.file("extdata", "known.csv", package = "Phydon"))
+### To get the correct directory of the genomic data on the local computer
+genomes <- data_info$accession_no
+gene_loc <- c()
+for (i in 1:length(genomes)) {
+  gene_loc[i] <- system.file("extdata", paste0("known/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+}
+data_info$gene_loc <- gene_loc
+
+
 
 num_cores <- 4
 # parallel processing phydon to the data_info
