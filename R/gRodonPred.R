@@ -13,8 +13,8 @@ gRodonpred <- function(gene_file, temp) {
   CDS_file <- gsub(".ffn", "_CDS_names.txt", gene_file)
   gff_file <- gsub(".ffn", ".gff", gene_file)
 
-  ### check if the file exists
-  if (!file.exists(CDS_file)) {
+  ### check if the file exists or the size of file is zero
+  if (!file.exists(CDS_file) || file.size(CDS_file) == 0) {
     print("The CDS file does not exist. Trying to create it using sed ... ")
     # This part is not working for now as it requests the system to have sed and awk installed.
     sed_lind <- utils::capture.output(

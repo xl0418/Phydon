@@ -119,6 +119,19 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
   for (i in 1:nrow(data_info_df)) {
     gene_loc <- data_info_df$gene_loc[i]
     genome <- data_info_df$accession_no[i]
+    gff_file <- gsub(".ffn", ".gff", gene_loc)
+
+    # check if the required ffn and gff files exist
+    if (!file.exists(gene_loc)) {
+      print(paste0("The ffn file ", gene_loc, " does not exist."))
+      next
+    }
+
+    if (!file.exists(gff_file)) {
+      print(paste0("The gff file ", gff_file, " does not exist."))
+      next
+    }
+
     if (exists("temps")) {
       temp <- temps[i]
     } else {
