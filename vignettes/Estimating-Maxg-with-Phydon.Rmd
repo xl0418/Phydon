@@ -57,6 +57,29 @@ Phydon is designed to be user-friendly. The package provides **two modes** for u
 
 Phydon supports both bacteria and archaea. Users can specify the taxon by setting the argument `tax` to either `bacteria` or `archaea`. The default is `bacteria`.
 
+## General requirements for both modes
+
+> [!IMPORTANT]\
+> For both modes, as gRodon requires annotated genomes, users need to annotate the genomes before using Phydon. We recommend using [Prokka](https://github.com/tseemann/prokka) for genome annotation. Thus, the directory structure of the genomic data should be like this:
+
+-   `genefiles/`
+    -   `genome1/`
+        -   `genome1.ffn`
+        -   `genome1.gff`
+        -   `genome1_CDS_names.txt`
+    -   `genome2/`
+        -   `genome2.ffn`
+        -   `genome2.gff`
+        -   `genome2_CDS_names.txt`
+    -   `genome3/`
+        -   `genome3.ffn`
+        -   `genome3.gff`
+        -   `genome3_CDS_names.txt`
+    -   ...
+
+> [!NOTE]\
+> The `genome1.ffn` is the fasta file of the genome, and the `genome1.gff` is the annotation file of the genome. These two files can be obtained when annotating genomes. The `genome1_CDS_names.txt` is the file that contains the names of the CDSs in the genome. Phydon will try to generate this file using `sed` command. If it fails, users need to generate this file manually. `sed` is usually available in Linux and MacOS. For Windows users, you can install `sed` from [here](https://sourceforge.net/projects/gnuwin32/files/sed/4.2.1/). See more details in the [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package. We recommend run Phydon in Linux or MacOS to avoid the potential issues in generating the `genome1_CDS_names.txt` file.
+
 
 ## Identified genomes
 
@@ -223,28 +246,6 @@ gtdbtk classify_wf --skip_ani_screen --genome_dir /path/to/genomes --out_dir /ou
 > The phylogenetic tree will be generated under the foler `/output/classify/`. It is usually named as `gtdbtk.bac120.classify.tree.1.tree`. Users then need to use this tree as the input of Phydon.
 
 
-## General requirements for both modes
-
-> [!IMPORTANT]\
-> For both modes, as gRodon requires annotated genomes, users need to annotate the genomes before using Phydon. We recommend using [Prokka](https://github.com/tseemann/prokka) for genome annotation. Thus, the directory structure of the genomic data should be like this:
-
--   `genefiles/`
-    -   `genome1/`
-        -   `genome1.ffn`
-        -   `genome1.gff`
-        -   `genome1_CDS_names.txt`
-    -   `genome2/`
-        -   `genome2.ffn`
-        -   `genome2.gff`
-        -   `genome2_CDS_names.txt`
-    -   `genome3/`
-        -   `genome3.ffn`
-        -   `genome3.gff`
-        -   `genome3_CDS_names.txt`
-    -   ...
-
-> [!NOTE]\
-> The `genome1.ffn` is the fasta file of the genome, and the `genome1.gff` is the annotation file of the genome. These two files can be obtained when annotating genomes. The `genome1_CDS_names.txt` is the file that contains the names of the CDSs in the genome. Phydon will try to generate this file using `sed` command. If it fails, users need to generate this file manually. `sed` is usually available in Linux and MacOS. For Windows users, you can install `sed` from [here](https://sourceforge.net/projects/gnuwin32/files/sed/4.2.1/). See more details in the [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package. We recommend run Phydon in Linux or MacOS to avoid the potential issues in generating the `genome1_CDS_names.txt` file.
 
 # The basic workflow
 
