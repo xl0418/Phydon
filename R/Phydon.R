@@ -8,7 +8,7 @@
 #' @export
 
 
-Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_mode="arithmetic_mean") {
+Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_mode="geometric_mean") {
   ## load the necessary data
   if (tax == "bacteria") {
     print("Estimating maximum growth rates for bacteria ...")
