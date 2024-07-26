@@ -3,7 +3,7 @@
 #' @param data_info_df The data frame that contains the information of the genomes to be estimated. The first column should be the directory of the genomic data, i.e., xxx.ffn. The second column should be the accession number of genomes. Or genome names if user provides phylogenetic tree. The third column should be the optimal growth temperature.
 #' @param user_tree The user-provided phylogenetic tree. It can be obtained by running gtdbtk on users' genomes and generated under the foler "/output/classify/". If not provided (user_tree = NULL), the user is supposed to provide the accession number of the genomes. Default is NULL.
 #' @param tax The taxon of the species. It can be "bacteria" or "archaea". Default is "bacteria".
-#' @param regression_mode The regression model to be used. It can be "arithmetic_mean" or "geometric_mean". Default is "arithmetic_mean".
+#' @param regression_mode The regression model to be used. It can be "arithmetic_mean" or "geometric_mean". Default is "geometric_mean".
 #' @return A data frame that contains the species name and the estimated maximum growth rates by three methods.
 #' @export
 

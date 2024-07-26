@@ -31,6 +31,8 @@ combopred <- function(input_df, regression_mode="arithmetic_mean") {
     } else if(regression_mode == "geometric_mean") {
 
       input_df$combopred <- input_df$gRodonpred ^ (test_data$pred_fitted) * input_df$phylopred ^ (1 - test_data$pred_fitted)
+    } else{
+      stop("Invalid regression mode. Please choose either 'arithmetic_mean' or 'geometric_mean'.")
     }
   }
 
