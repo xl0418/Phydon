@@ -44,5 +44,8 @@ gRodonpred <- function(gene_file, temp) {
 
   maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = temp)
 
-  return(maxg$d)
+  # list to data frame
+  maxg <- as.data.frame(maxg)
+
+  return(maxg)
 }

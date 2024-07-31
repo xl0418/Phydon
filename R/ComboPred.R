@@ -5,7 +5,7 @@
 
 
 
-combopred <- function(input_df, regression_mode="arithmetic_mean") {
+combopred <- function(input_df, regression_mode="geometric_mean") {
   # find the rows with any of gRodonpred, phy_distance, or phylopred is missing
   missing_rows <- which(is.na(input_df$gRodonpred) | is.na(input_df$phy_distance) | is.na(input_df$phylopred))
   if (length(missing_rows) > 0) {

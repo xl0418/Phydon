@@ -44,8 +44,17 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
     usertree <- FALSE
   }
 
+  ## check if gene_location and genome_name are in the column names
+  if (!("gene_location" %in% colnames(data_info_df))) {
+    return("The column name of the gene location is not correct. Please provide the gene locations in the column named 'gene_location'.")
+  }
+
+  if (!("genome_name" %in% colnames(data_info_df))) {
+    return("The column name of the genome names is not correct. Please provide the accession numbers in the column named 'genome_name'.")
+  }
+
   ## check the length of species and the gene files
-  genomes_to_est <- data_info_df$accession_no
+  genomes_to_est <- data_info_df$genome_name
 
   if (length(genomes_to_est) == 0) {
     return("The gene file is empty.")
@@ -53,15 +62,15 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
     print(
       paste0(
         length(genomes_to_est),
-        " genomes are found in the gene file. Start estimating maximum growth rates ..."
+        " genomes are found in the input file. Start estimating maximum growth rates ..."
       )
     )
   }
 
 
   ## check if the temperature column exists
-  if ("tmp" %in% colnames(data_info_df)) {
-    temps <- data_info_df$tmp
+  if ("temperature" %in% colnames(data_info_df)) {
+    temps <- data_info_df$temperature
     print("The growth temperatures are provided.")
   } else {
     print("The growth temperatures are not provided.")
@@ -81,9 +90,9 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
   )
 
   rep_genomes_df <- prepare_for_genomes_to_est[[1]]
-  if ("tmp" %in% colnames(data_info_df)) {
-    temp_info <- data_info_df[, c("accession_no", "tmp")]
-    colnames(temp_info) <- c("genome", "tmp")
+  if ("temperature" %in% colnames(data_info_df)) {
+    temp_info <- data_info_df[, c("genome_name", "temperature")]
+    colnames(temp_info) <- c("genome", "temperature")
     rep_genomes_df <- merge(rep_genomes_df, temp_info, by = "genome")
   }
 
@@ -117,29 +126,27 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
   est_gRodon_df <- data.frame()
 
   for (i in 1:nrow(data_info_df)) {
-    gene_loc <- data_info_df$gene_loc[i]
-    genome <- data_info_df$accession_no[i]
-    gff_file <- gsub(".ffn", ".gff", gene_loc)
+    gene_location <- data_info_df$gene_location[i]
+    genome <- data_info_df$genome_name[i]
+    gff_file <- gsub(".ffn", ".gff", gene_location)
 
     # check if the required ffn and gff files exist
-    if (!file.exists(gene_loc)) {
-      print(paste0("The ffn file ", gene_loc, " does not exist."))
+    if (!file.exists(gene_location)) {
+      print(paste0("The ffn file ", gene_location, " does not exist."))
       next
     }
 
-    if (!file.exists(gff_file)) {
-      print(paste0("The gff file ", gff_file, " does not exist."))
-      next
-    }
 
     if (exists("temps")) {
       temp <- temps[i]
     } else {
       temp <- "none"
     }
-    Est_gRodon <- gRodonpred(gene_loc, temp = temp)
+    Est_gRodon <- gRodonpred(gene_location, temp = temp)
+    Est_gRodon$genome <- genome
+    colnames(Est_gRodon)[10] <- "gRodonpred"
     est_gRodon_df <- rbind(est_gRodon_df,
-                           data.frame(genome = genome, gRodonpred = Est_gRodon))
+                           Est_gRodon)
   }
 
 
@@ -153,17 +160,28 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
 
 
   ## rearrange the columns
-  if ("tmp" %in% colnames(data_info_df)) {
+  if ("temperature" %in% colnames(data_info_df)) {
     combopred_df <- combopred_df[, c(
       "genome",
       "rep_genome",
       "species",
       "neighbor_repgenome_train",
       "phy_distance",
-      "tmp",
+      "temperature",
       "gRodonpred",
       "phylopred",
-      "combopred"
+      "combopred",
+      "CUBHE",
+      "GC",
+      "GCdiv",
+      "ConsistencyHE",
+      "CUB",
+      "CPB",
+      "FilteredSequences",
+      "nHE",
+      "dCUB",
+      "LowerCI",
+      "UpperCI"
     )]
   } else {
     combopred_df <- combopred_df[, c(
@@ -174,7 +192,18 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
       "phy_distance",
       "gRodonpred",
       "phylopred",
-      "combopred"
+      "combopred",
+      "CUBHE",
+      "GC",
+      "GCdiv",
+      "ConsistencyHE",
+      "CUB",
+      "CPB",
+      "FilteredSequences",
+      "nHE",
+      "dCUB",
+      "LowerCI",
+      "UpperCI"
     )]
   }
 

@@ -126,18 +126,18 @@ data_info <- read.csv(system.file("extdata", "known.csv", package = "Phydon"))
 #### To get the directory of the genomic data  ####
 #### This is only for internal data as directory of genomic data is ad hoc per user's system ####
 #### For user's input data, see below for details ####
-genomes <- data_info$accession_no
-gene_loc <- c()
+genomes <- data_info$genome_name
+gene_location <- c()
 for (i in 1:length(genomes)) {
-  gene_loc[i] <- system.file("extdata", paste0("known/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+  gene_location[i] <- system.file("extdata", paste0("known/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
 }
 
 
 # Generate some genomes with user picked names.
 # The genome sequences are provided.
 # In this case, only gRodon estimation will be used.
-data_info$gene_loc <- gene_loc
-data_info <- rbind(data_info, data.frame(gene_loc = data_info$gene_loc, accession_no = c(1:10)))
+data_info$gene_location <- gene_location
+data_info <- rbind(data_info, data.frame(gene_location = data_info$gene_location, genome_name = c(1:10)))
 
 
 # estimate the maximum growth rate
@@ -151,12 +151,12 @@ columns:
 
 The columns are:
 
-- `gene_loc`: the directory of the annotated genomic data. The fasta
-  file should be named as the accession number of the genome. For
+- `gene_location`: the directory of the annotated genomic data. The
+  fasta file should be named as the accession number of the genome. For
   example, the fasta file of the genome with the accession number
   `RS_GCF_000024245.1` should be named as `RS_GCF_000024245.1.ffn`.
 
-- `accession_no`: the accession number of the genome that users want to
+- `genome_name`: the accession number of the genome that users want to
   predict the growth rate. In this mode, the accession number is
   expected to be in the GTDB database. If the accession number is not in
   the GTDB database, Phydon will treat the genome as a single species
@@ -172,7 +172,7 @@ The columns are:
 What the input file looks like
 </summary>
 
-| gene_loc                                        | accession_no       |
+| gene_location                                   | genome_name        |
 |-------------------------------------------------|--------------------|
 | known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 |
 | known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 |
@@ -286,12 +286,12 @@ user_tree <- ape::read.tree(system.file("extdata", "usertree.tree", package = "P
 #### To get the directory of the genomic data  ####
 #### This is only for internal data as directory of genomic data is ad hoc per user's system ####
 #### For user's input data, see below for details ####
-genomes <- data_info$accession_no
-gene_loc <- c()
+genomes <- data_info$genome_name
+gene_location <- c()
 for (i in 1:length(genomes)) {
-  gene_loc[i] <- system.file("extdata", paste0("unknown/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+  gene_location[i] <- system.file("extdata", paste0("unknown/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
 }
-data_info$gene_loc <- gene_loc
+data_info$gene_location <- gene_location
 
 
 # estimate the maximum growth rate
@@ -305,12 +305,12 @@ that contains users genomes:
 
 1.  The data frame has the same columns as mentioned above:
 
-- `gene_loc`: the directory of the annotated genomic data. The annotated
-  genomes should be named after genome names. For example, the ffn and
-  gff files should be named as `user_genome1.ffn` and
+- `gene_location`: the directory of the annotated genomic data. The
+  annotated genomes should be named after genome names. For example, the
+  ffn and gff files should be named as `user_genome1.ffn` and
   `user_genome1.gff`.
 
-- `accession_no`: the genome names. For example, `user_genome1`.
+- `genome_name`: the genome names. For example, `user_genome1`.
 
 - `tmp`: **Optional**. This is used for gRodon predictions. If not
   provided, gRodon will not consider temperature in the predictions.
@@ -387,12 +387,12 @@ library(doParallel)
 ### read the data
 data_info <- read.csv(system.file("extdata", "known.csv", package = "Phydon"))
 ### To get the correct directory of the genomic data on the local computer
-genomes <- data_info$accession_no
-gene_loc <- c()
+genomes <- data_info$genome_name
+gene_location <- c()
 for (i in 1:length(genomes)) {
-  gene_loc[i] <- system.file("extdata", paste0("known/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
+  gene_location[i] <- system.file("extdata", paste0("known/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
 }
-data_info$gene_loc <- gene_loc
+data_info$gene_location <- gene_location
 
 
 
