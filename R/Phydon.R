@@ -140,7 +140,7 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
     if (exists("temps")) {
       temp <- temps[i]
     } else {
-      temp <- "none"
+      temp <- NA
     }
     Est_gRodon <- gRodonpred(gene_location, temp = temp)
     Est_gRodon$genome <- genome
