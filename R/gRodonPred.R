@@ -28,7 +28,7 @@ gRodonpred <- function(gene_file, temp) {
     system(sed_lind, intern = TRUE)
     if (!file.exists(CDS_file)) {
       print(
-        "Creating failed. It might be due to that sed cannot be used, particularly on Windowns. Please check https://microbialgamut.com/gRodon-vignette to mannually generate CDS files."
+        "Creating failed. It might be due to that sed cannot be used, particularly on Windows. Please check https://microbialgamut.com/gRodon-vignette to mannually generate CDS files."
       )
       stop("The CDS file does not exist.")
     }
@@ -42,10 +42,27 @@ gRodonpred <- function(gene_file, temp) {
   #Search for genes annotated as ribosomal proteins
   highly_expressed <- grepl("ribosomal protein", names(genes), ignore.case = T)
 
-  maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = temp)
+  # Deal with errors from gRodon
+  tryCatch({
+    maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = temp)
+    # list to data frame
+    maxg <- as.data.frame(maxg)
+  }, error = function(e) {
+    print(paste("Error in predicting the growth rate. Please check the gene sequences at", gene_file))
+    maxg <<- data.frame(CUBHE = NA,
+                       GC = NA,
+                       GCdiv = NA,
+                       ConsistencyHE = NA,
+                       CUB = NA,
+                       CPB = NA,
+                       FilteredSequences = NA,
+                       nHE = NA,
+                       dCUB = NA,
+                       gRodonpred = NA,
+                       LowerCI = NA,
+                       UpperCI = NA)
+  })
 
-  # list to data frame
-  maxg <- as.data.frame(maxg)
 
   return(maxg)
 }
