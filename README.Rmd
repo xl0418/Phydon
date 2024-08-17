@@ -113,8 +113,10 @@ for (i in 1:length(genomes)) {
 # The genome sequences are provided.
 # In this case, only gRodon estimation will be used.
 data_info$gene_location <- gene_location
-data_info <- rbind(data_info, data.frame(gene_location = data_info$gene_location, genome_name = c(1:10)))
+data_info <- rbind(data_info, data.frame(gene_location = data_info$gene_location, genome_name = c(1:11)))
 
+### temperature
+data_info$temperature <- rep(20, nrow(data_info))
 
 # estimate the maximum growth rate
 result <- Phydon(data_info)

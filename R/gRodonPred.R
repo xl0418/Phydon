@@ -49,18 +49,36 @@ gRodonpred <- function(gene_file, temp) {
     maxg <- as.data.frame(maxg)
   }, error = function(e) {
     print(paste("Error in predicting the growth rate. Please check the gene sequences at", gene_file))
-    maxg <<- data.frame(CUBHE = NA,
-                       GC = NA,
-                       GCdiv = NA,
-                       ConsistencyHE = NA,
-                       CUB = NA,
-                       CPB = NA,
-                       FilteredSequences = NA,
-                       nHE = NA,
-                       dCUB = NA,
-                       gRodonpred = NA,
-                       LowerCI = NA,
-                       UpperCI = NA)
+    if(is.na(temp)){
+      maxg <<- data.frame(CUBHE = NA,
+                          GC = NA,
+                          GCdiv = NA,
+                          ConsistencyHE = NA,
+                          CUB = NA,
+                          CPB = NA,
+                          FilteredSequences = NA,
+                          nHE = NA,
+                          dCUB = NA,
+                          d = NA,
+                          LowerCI = NA,
+                          UpperCI = NA)
+    }else{
+      maxg <<- data.frame(CUBHE = NA,
+                          GC = NA,
+                          GCdiv = NA,
+                          ConsistencyHE = NA,
+                          CUB = NA,
+                          CPB = NA,
+                          FilteredSequences = NA,
+                          nHE = NA,
+                          dCUB = NA,
+                          OGT = temp,
+                          d = NA,
+                          LowerCI = NA,
+                          UpperCI = NA
+                          )
+    }
+
   })
 
 
