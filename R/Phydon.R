@@ -160,52 +160,30 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
 
 
   ## rearrange the columns
-  if ("temperature" %in% colnames(data_info_df)) {
-    combopred_df <- combopred_df[, c(
-      "genome",
-      "rep_genome",
-      "species",
-      "neighbor_repgenome_train",
-      "phy_distance",
-      "temperature",
-      "gRodonpred",
-      "phylopred",
-      "combopred",
-      "CUBHE",
-      "GC",
-      "GCdiv",
-      "ConsistencyHE",
-      "CUB",
-      "CPB",
-      "FilteredSequences",
-      "nHE",
-      "dCUB",
-      "LowerCI",
-      "UpperCI"
-    )]
-  } else {
-    combopred_df <- combopred_df[, c(
-      "genome",
-      "rep_genome",
-      "species",
-      "neighbor_repgenome_train",
-      "phy_distance",
-      "gRodonpred",
-      "phylopred",
-      "combopred",
-      "CUBHE",
-      "GC",
-      "GCdiv",
-      "ConsistencyHE",
-      "CUB",
-      "CPB",
-      "FilteredSequences",
-      "nHE",
-      "dCUB",
-      "LowerCI",
-      "UpperCI"
-    )]
-  }
+
+  combopred_df <- combopred_df[, c(
+    "genome",
+    "rep_genome",
+    "species",
+    "neighbor_repgenome_train",
+    "phy_distance",
+    "OGT",
+    "gRodonpred",
+    "phylopred",
+    "combopred",
+    "CUBHE",
+    "GC",
+    "GCdiv",
+    "ConsistencyHE",
+    "CUB",
+    "CPB",
+    "FilteredSequences",
+    "nHE",
+    "dCUB",
+    "LowerCI",
+    "UpperCI"
+  )]
+
 
   print("Estimation is done.")
 

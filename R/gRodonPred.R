@@ -47,37 +47,24 @@ gRodonpred <- function(gene_file, temp) {
     maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = temp)
     # list to data frame
     maxg <- as.data.frame(maxg)
+    maxg$OGT <- temp
   }, error = function(e) {
     print(paste("Error in predicting the growth rate. Please check the gene sequences at", gene_file))
-    if(is.na(temp)){
-      maxg <<- data.frame(CUBHE = NA,
-                          GC = NA,
-                          GCdiv = NA,
-                          ConsistencyHE = NA,
-                          CUB = NA,
-                          CPB = NA,
-                          FilteredSequences = NA,
-                          nHE = NA,
-                          dCUB = NA,
-                          d = NA,
-                          LowerCI = NA,
-                          UpperCI = NA)
-    }else{
-      maxg <<- data.frame(CUBHE = NA,
-                          GC = NA,
-                          GCdiv = NA,
-                          ConsistencyHE = NA,
-                          CUB = NA,
-                          CPB = NA,
-                          FilteredSequences = NA,
-                          nHE = NA,
-                          dCUB = NA,
-                          OGT = temp,
-                          d = NA,
-                          LowerCI = NA,
-                          UpperCI = NA
-                          )
-    }
+    maxg <<- data.frame(CUBHE = NA,
+                        GC = NA,
+                        GCdiv = NA,
+                        ConsistencyHE = NA,
+                        CUB = NA,
+                        CPB = NA,
+                        FilteredSequences = NA,
+                        nHE = NA,
+                        dCUB = NA,
+                        OGT = temp,
+                        d = NA,
+                        LowerCI = NA,
+                        UpperCI = NA
+                        )
+
 
   })
 
