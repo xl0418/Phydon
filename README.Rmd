@@ -119,7 +119,7 @@ data_info <- rbind(data_info, data.frame(gene_location = data_info$gene_location
 data_info$temperature <- rep(20, nrow(data_info))
 
 # estimate the maximum growth rate
-result <- Phydon(data_info)
+result <- Phydon(data_info, gRodon_mode="full")
 
 ```
 
@@ -342,6 +342,7 @@ phydon_res <- foreach(i = 1:nrow(data_info), .combine = rbind, .packages = "Phyd
 }
 stopCluster(cl)
 
+phydon_res
 # save
 # write.csv(phydon_res, "phydon_prediction_results.csv", row.names=FALSE)
 ```

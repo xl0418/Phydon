@@ -4,28 +4,49 @@
 #' @param user_tree The user-provided phylogenetic tree. It can be obtained by running gtdbtk on users' genomes and generated under the foler "/output/classify/". If not provided (user_tree = NULL), the user is supposed to provide the accession number of the genomes. Default is NULL.
 #' @param tax The taxon of the species. It can be "bacteria" or "archaea". Default is "bacteria".
 #' @param regression_mode The regression model to be used. It can be "arithmetic_mean" or "geometric_mean". Default is "geometric_mean".
+#' @param gRodon_mode The mode of gRodon prediction. It can be "full" or "metagenome". Default is "full".
 #' @return A data frame that contains the species name and the estimated maximum growth rates by three methods.
 #' @export
 
 
-Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_mode="geometric_mean") {
+Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_mode="geometric_mean",gRodon_mode="full") {
   ## load the necessary data
+  reg_model <- reg_model_tmp <- NULL
   if (tax == "bacteria") {
     print("Estimating maximum growth rates for bacteria ...")
     GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded",
                                                       envir = asNamespace("Phydon"))
     gtdb_tree <- get0("gtdb_tree", envir = asNamespace("Phydon"))
     sp_clusters <- get0("sp_clusters_bac", envir = asNamespace("Phydon"))
-    reg_model <- get0("reg_model", envir = asNamespace("Phydon"))
-    reg_model_tmp <- get0("reg_model_tmp", envir = asNamespace("Phydon"))
+    if(gRodon_mode == "full"){
+      reg_model <- get0("reg_model_bacteria_full", envir = asNamespace("Phydon"))
+      reg_model_tmp <- get0("reg_model_tmp_bacteria_full", envir = asNamespace("Phydon"))
+    }else if(gRodon_mode == "metagenome"){
+      reg_model <- get0("reg_model_bacteria_metagenome", envir = asNamespace("Phydon"))
+      reg_model_tmp <- get0("reg_model_tmp_bacteria_metagenome", envir = asNamespace("Phydon"))
+    }else{
+      stop("The gRodon mode is not supported.")
+    }
+    # reg_model <- get0("reg_model", envir = asNamespace("Phydon"))
+    # reg_model_tmp <- get0("reg_model_tmp", envir = asNamespace("Phydon"))
   } else if (tax == "archaea") {
     print("Estimating maximum growth rates for archaea ...")
     GTDB_tax_trait_repGenome_in_tree_expanded <- get0("GTDB_tax_trait_repGenome_in_tree_expanded_archaea",
                                                       envir = asNamespace("Phydon"))
     gtdb_tree <- get0("gtdb_tree_archaea", envir = asNamespace("Phydon"))
     sp_clusters <- get0("sp_clusters_arc", envir = asNamespace("Phydon"))
-    reg_model <- get0("reg_model_archaea", envir = asNamespace("Phydon"))
-    reg_model_tmp <- get0("reg_model_tmp_archaea", envir = asNamespace("Phydon"))
+    if(gRodon_mode == "full"){
+      reg_model <- get0("reg_model_archaea_full", envir = asNamespace("Phydon"))
+      reg_model_tmp <- get0("reg_model_tmp_archaea_full", envir = asNamespace("Phydon"))
+    }else if(gRodon_mode == "metagenome"){
+      reg_model <- get0("reg_model_archaea_metagenome", envir = asNamespace("Phydon"))
+      reg_model_tmp <- get0("reg_model_tmp_archaea_metagenome", envir = asNamespace("Phydon"))
+    }else{
+      stop("The gRodon mode is not supported.")
+    }
+
+    # reg_model <- get0("reg_model_archaea", envir = asNamespace("Phydon"))
+    # reg_model_tmp <- get0("reg_model_tmp_archaea", envir = asNamespace("Phydon"))
 
   } else {
     return("The taxon is not supported.")
@@ -156,7 +177,7 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
   print("Start Phydon regression predictions ...")
   input_df <- merge(est_gRodon_df, phylopred_df, by = "genome")
 
-  combopred_df <- combopred(input_df, regression_mode)
+  combopred_df <- combopred(input_df, reg_model, reg_model_tmp, regression_mode)
 
 
   ## rearrange the columns

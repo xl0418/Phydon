@@ -8,7 +8,8 @@ Phydon(
   data_info_df,
   user_tree = NULL,
   tax = "bacteria",
-  regression_mode = "geometric_mean"
+  regression_mode = "geometric_mean",
+  gRodon_mode = "full"
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ Phydon(
 \item{tax}{The taxon of the species. It can be "bacteria" or "archaea". Default is "bacteria".}
 
 \item{regression_mode}{The regression model to be used. It can be "arithmetic_mean" or "geometric_mean". Default is "geometric_mean".}
+
+\item{gRodon_mode}{The mode of gRodon prediction. It can be "full" or "metagenome". Default is "full".}
 }
 \value{
 A data frame that contains the species name and the estimated maximum growth rates by three methods.

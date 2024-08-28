@@ -5,7 +5,7 @@
 
 
 
-combopred <- function(input_df, regression_mode="geometric_mean") {
+combopred <- function(input_df, reg_model, reg_model_tmp, regression_mode="geometric_mean") {
   # find the rows with any of gRodonpred, phy_distance, or phylopred is missing
   missing_rows <- which(is.na(input_df$gRodonpred) | is.na(input_df$phy_distance) | is.na(input_df$phylopred))
   if (length(missing_rows) > 0) {
@@ -21,7 +21,7 @@ combopred <- function(input_df, regression_mode="geometric_mean") {
     test_data <- data.frame(log_gRodon = log(input_df$gRodonpred),
                             phy_distance = input_df$phy_distance)
     # if input_df has tmp column
-    if("temp" %in% colnames(input_df)) {
+    if("temperature" %in% colnames(input_df)) {
       test_data$pred_fitted <- stats::predict(reg_model_tmp, test_data, type = "response")
     } else {
       test_data$pred_fitted <- stats::predict(reg_model, test_data, type = "response")

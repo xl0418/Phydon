@@ -33,23 +33,36 @@ GTDB_tax_trait_repGenome_in_tree_expanded_archaea <- read.table(
 
 
 ## load the regression model
-load("data-raw/reg_model.RData")
-load("data-raw/reg_model_tmp.RData")
-# usethis::use_data(reg_model, overwrite = TRUE)
-load("data-raw/reg_model_archaea.RData")
-load("data-raw/reg_model_tmp_archaea.RData")
+### bacteria full temperature and not temperature
+load("data-raw/reg_model_tmp_bacteria_full.RData")
+load("data-raw/reg_model_bacteria_full.RData")
+### bacteria metagenome temperature and not temperature
+load("data-raw/reg_model_tmp_bacteria_metagenome.RData")
+load("data-raw/reg_model_bacteria_metagenome.RData")
+
+### archaea full temperature and not temperature
+load("data-raw/reg_model_tmp_archaea_full.RData")
+load("data-raw/reg_model_archaea_full.RData")
+### archaea metagenome temperature and not temperature
+load("data-raw/reg_model_tmp_archaea_metagenome.RData")
+load("data-raw/reg_model_archaea_metagenome.RData")
+
 
 usethis::use_data(
   gtdb_tree,
   sp_clusters_bac,
   sp_clusters_arc,
   GTDB_tax_trait_repGenome_in_tree_expanded,
-  reg_model,
-  reg_model_tmp,
+  reg_model_bacteria_full,
+  reg_model_tmp_bacteria_full,
+  reg_model_bacteria_metagenome,
+  reg_model_tmp_bacteria_metagenome,
   gtdb_tree_archaea,
   GTDB_tax_trait_repGenome_in_tree_expanded_archaea,
-  reg_model_archaea,
-  reg_model_tmp_archaea,
+  reg_model_archaea_full,
+  reg_model_tmp_archaea_full,
+  reg_model_archaea_metagenome,
+  reg_model_tmp_archaea_metagenome,
   internal = TRUE,
   overwrite = TRUE
 )
