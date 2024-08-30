@@ -13,9 +13,9 @@ Estimating maximum growth rates of bacteria from genomic data with
 
 Phydon is a R package that estimates maximum growth rates of
 bacteria/archaea from genomic data and phylogenetic information. This
-package implements a method detailed in [Our paper](), which leverages
-phylogenetic signals and mechanistic statistics, specifically [codon
-usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see
+package implements a method detailed in [Our paper](), leveraging
+phylogenetic signals and the mechanistic factor, [codon usage bias
+(CUB)](https://github.com/jlw-ecoevo/gRodon2) (see
 [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details of this
 mechanistic method), to enhance the accuracy of growth rate estimations.
 By integrating these advanced techniques, Phydon provides a robust tool
@@ -52,26 +52,73 @@ devtools::install_github("jlw-ecoevo/gRodon2")
 
 # Usage
 
-Phydon is designed to be user-friendly. The package provides **two
-modes** for users to estimate the maximum growth rates of bacteria.
+## Identified/unidentified genomes in the GTDB `user_tree`
+
+Default is `NULL`, which considers the genomes are identified in the
+GTDB database.
 
 - **Identified genomes**: Users’ genomes are identified in the GTDB
-  database and assigned with accession numbers. In this case, Phydon
-  will search for the representative genomes of the species that the
-  users’ genomes belong to and use the phylogenetic information and
-  gRodon to enhance the growth rate predictions.
+  database and assigned with accession numbers (e.g.,
+  RS_GCF_002749895.1). In this case, Phydon will search the GTDB for the
+  representative genomes of the species that the users’ genomes belong
+  to and use the phylogenetic information and gRodon to enhance the
+  growth rate predictions.
 
 - **Unidentified genomes**: Users’ genomes are not identified in the
   GTDB database. In this case, user needs to provide a phylogeny tree
   that contains the users’ genomes and the representative genomes in the
   GTDB database. Phydon will compute the phylogenetic distance of users’
-  genome to the training data and estimate the maximum growth rates.
+  genome to the genomes in the training data and estimate the maximum
+  growth rates.
 
-## Bacteria and Archaea
+## Bacteria and Archaea `tax`
 
-Phydon supports both bacteria and archaea. Users can specify the taxon
-by setting the argument `tax` to either `bacteria` or `archaea`. The
+By default, `tax` is set to `bacteria`. Users can set `tax` to `archaea`
+to estimate the maximum growth rates of archaea.
+
+Phydon supports both bacteria and archaea. Users **NEED** to specify the
+taxon by setting the argument `tax` to either `bacteria` or `archaea` to
+obtain the estimation. Otherwise, the predictions will be NA. The
 default is `bacteria`.
+
+## The functional types of the regression model `regression_mode`
+
+By default, `regression_mode="geometric"`. Possible values are
+`geometric` and `arithmetic`.
+
+Phydon provides two regression functional types for users to estimate
+the maximum growth rates of bacteria/archaea. One is the **arithmetic
+regression model**,
+
+$$
+\tilde{y}_{Phydon} = P \times \tilde{y}_{gRodon} + (1-P) \times \tilde{y}_{phylo}
+$$
+
+and the other is the **geometric regression model**
+
+$$
+\tilde{y}_{Phydon} = \tilde{y}_{gRodon}^P \times \tilde{y}_{phylo}^{(1-P)}
+$$
+
+where $P$ is probability of the gRodon predictions outcompeting the
+Phylopred predictions. The geometric regression model is the default
+model. Users can set the argument `regression_mode` to `arithmetic` to
+use the geometric regression model.
+
+## The gRodon mode `gRodon_mode`
+
+By default, `gRodon_mode="full"`. Possible values are `full` and
+`metagenome`.
+
+Phydon provides two modes for users to estimate the maximum growth rates
+of bacteria/archaea. One is the **full mode**, which considers CUBHE,
+ConsistencyHE, and CPB. The other is the **metagenome mode**, which only
+considers CUBHE in the regression model. This is used to prevent weird
+estimations from the metagenomes as consistency statistic is not
+appropriate. See the [gRodon](https://github.com/jlw-ecoevo/gRodon2)
+package for details. Importantly, metagenome mode is expected to be less
+accurate than the default mode, so only use this mode if you must. The
+default is `full`.
 
 ## General requirements for both modes
 
@@ -140,10 +187,11 @@ data_info$gene_location <- gene_location
 data_info <- rbind(data_info, data.frame(gene_location = data_info$gene_location, genome_name = c(1:11)))
 
 ### temperature
-data_info$temperature <- rep(20, nrow(data_info))
+# data_info$temperature <- rep(20, nrow(data_info))
 
 # estimate the maximum growth rate
-result <- Phydon(data_info, gRodon_mode="full")
+result_full <- Phydon(data_info, gRodon_mode="full")
+result_metagenome <- Phydon(data_info, gRodon_mode="metagenome")
 ```
 
 ## Input data structure
@@ -427,5 +475,9 @@ phydon_res
 # save
 # write.csv(phydon_res, "phydon_prediction_results.csv", row.names=FALSE)
 ```
+
+# The example script from ASVs to the accession numbers of the genomes in the GTDB
+
+Under construction…
 
 # Citation

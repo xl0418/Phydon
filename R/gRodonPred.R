@@ -5,7 +5,7 @@
 #'
 #' @noRd
 
-gRodonpred <- function(gene_file, temp) {
+gRodonpred <- function(gene_file, temp, gRodon_mode = "full") {
   ### format in xxx.ffn
   genes <- Biostrings::readDNAStringSet(gene_file)
 
@@ -42,9 +42,17 @@ gRodonpred <- function(gene_file, temp) {
   #Search for genes annotated as ribosomal proteins
   highly_expressed <- grepl("ribosomal protein", names(genes), ignore.case = T)
 
+  if(gRodon_mode == "full"){
+    mode = "full"
+  } else if (gRodon_mode == "metagenome"){
+    mode = "metagenome_v2"
+  } else {
+    stop("The mode should be either 'full' or 'metagenome'.")
+  }
+
   # Deal with errors from gRodon
   tryCatch({
-    maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = temp)
+    maxg <- gRodon::predictGrowth(genes, highly_expressed, temperature = temp, mode = mode)
     # list to data frame
     maxg <- as.data.frame(maxg)
     maxg$OGT <- temp

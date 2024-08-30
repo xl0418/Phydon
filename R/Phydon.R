@@ -163,7 +163,7 @@ Phydon <- function(data_info_df, user_tree = NULL, tax = "bacteria", regression_
     } else {
       temp <- NA
     }
-    Est_gRodon <- gRodonpred(gene_location, temp = temp)
+    Est_gRodon <- gRodonpred(gene_location, temp = temp, gRodon_mode = gRodon_mode)
     Est_gRodon$genome <- genome
     colnames(Est_gRodon)[which(colnames(Est_gRodon) == "d")] <- "gRodonpred"
     est_gRodon_df <- rbind(est_gRodon_df,
