@@ -120,9 +120,9 @@ regression model**,
 
 and the other is the **geometric regression model**
 
-$$
+``` math
 \tilde{y}_{Phydon} = \tilde{y}_{gRodon}^P \times \tilde{y}_{phylo}^{(1-P)}
-$$
+```
 
 where $P$ is probability of the gRodon predictions outcompeting the
 Phylopred predictions. The geometric regression model is the default
