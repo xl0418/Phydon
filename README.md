@@ -114,9 +114,9 @@ Phydon provides two regression functional types for users to estimate
 the maximum growth rates of bacteria/archaea. One is the **arithmetic
 regression model**,
 
-$$
+``` math
 \tilde{y}_{Phydon} = P \times \tilde{y}_{gRodon} + (1-P) \times \tilde{y}_{phylo}
-$$
+```
 
 and the other is the **geometric regression model**
 
