@@ -357,7 +357,7 @@ gtdbtk classify_wf --skip_ani_screen --genome_dir /path/to/genomes --out_dir /ou
 3.  Run Phydon with the `data_info.csv` file.
 
 
-# Estimating a large number of genomes in parallel
+# Processing a large number of genomes in parallel
 
 In some cases, users may have a large number of genomes to estimate. Here, we provide an example script that can be used to estimate a large number of genomes in parallel. The script is as follows:
 

@@ -25,8 +25,8 @@
 - [The basic workflow](#the-basic-workflow)
   - [Unidentified genomes](#unidentified-genomes-2)
   - [Identified genomes](#identified-genomes-1)
-- [Estimating a large number of genomes in
-  parallel](#estimating-a-large-number-of-genomes-in-parallel)
+- [Processing a large number of genomes in
+  parallel](#processing-a-large-number-of-genomes-in-parallel)
 - [The example script from ASVs to the accession numbers of the genomes
   in the
   GTDB](#the-example-script-from-asvs-to-the-accession-numbers-of-the-genomes-in-the-gtdb)
@@ -496,7 +496,7 @@ accession numbers are not given.
 
 3.  Run Phydon with the `data_info.csv` file.
 
-# Estimating a large number of genomes in parallel
+# Processing a large number of genomes in parallel
 
 In some cases, users may have a large number of genomes to estimate.
 Here, we provide an example script that can be used to estimate a large
