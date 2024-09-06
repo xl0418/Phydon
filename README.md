@@ -1,4 +1,37 @@
 
+- [Phydon](#phydon)
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Arguments](#arguments)
+  - [Identified/unidentified genomes in the GTDB
+    `user_tree`](#identifiedunidentified-genomes-in-the-gtdb-user_tree)
+  - [Bacteria and Archaea `tax`](#bacteria-and-archaea-tax)
+  - [The functional types of the regression model
+    `regression_mode`](#the-functional-types-of-the-regression-model-regression_mode)
+  - [The gRodon mode `gRodon_mode`](#the-grodon-mode-grodon_mode)
+  - [General requirements for both
+    modes](#general-requirements-for-both-modes)
+  - [Identified genomes](#identified-genomes)
+  - [Minimal example](#minimal-example)
+  - [Input data structure](#input-data-structure)
+  - [Output](#output)
+  - [Unidentified genomes](#unidentified-genomes)
+  - [Minimal example](#minimal-example-1)
+  - [Input data structure](#input-data-structure-1)
+  - [Output data structure](#output-data-structure)
+- [Before you start](#before-you-start)
+  - [Unidentified genomes](#unidentified-genomes-1)
+- [The basic workflow](#the-basic-workflow)
+  - [Unidentified genomes](#unidentified-genomes-2)
+  - [Identified genomes](#identified-genomes-1)
+- [Estimating a large number of genomes in
+  parallel](#estimating-a-large-number-of-genomes-in-parallel)
+- [The example script from ASVs to the accession numbers of the genomes
+  in the
+  GTDB](#the-example-script-from-asvs-to-the-accession-numbers-of-the-genomes-in-the-gtdb)
+- [Citation](#citation)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Phydon
@@ -502,6 +535,45 @@ phydon_res
 
 # The example script from ASVs to the accession numbers of the genomes in the GTDB
 
-Under construction…
+We recommend users to use the GTDB database for their ASV sequences
+queries. The following script can be used to convert the ASV sequences
+to the accession numbers of the genomes in the GTDB database:
+
+``` sh
+#!/bin/bash -i 
+
+### Create a conda environment with blast and download GTDB database for blast
+#conda create -n blast-env -c bioconda blast
+
+### Activate the environment and download the GTDB database
+conda activate blast-env
+
+#downloaded as follows into GTDB-blastdb-r220 directory:
+#wget https://data.gtdb.ecogenomic.org/releases/release220/220.0/genomic_files_all/ssu_all_r220.fna.gz
+makeblastdb -dbtype nucl -in GTDB-blastdb-r220/ssu_all_r220.fna 
+```
+
+This script will download the GTDB database and create a blast database.
+Users can then use the following script to convert the ASV sequences to
+the accession numbers of the genomes in the GTDB database:
+
+``` sh
+#!/bin/bash -i 
+conda activate blast-env
+
+
+mkdir -p BLAST-output-r220
+
+#blast against GTDB r220
+blastn -query your_sequences.fasta -db GTDB-blastdb-r220/ssu_all_r220.fna -outfmt 6 -perc_identity 95 -qcov_hsp_perc 100 > BLAST-output-r220/your_BLASTOUTPUT-95pcID-vs-GTDB-r220-allssu.tsv
+
+### zip the output
+#zip -m BLAST-output-r220/your_BLASTOUTPUT-95pcID-vs-GTDB-r220-allssu.zip BLAST-output-r220/your_BLASTOUTPUT-95pcID-vs-GTDB-r220-allssu.tsv
+```
+
+The output of the script will be a tab-delimited file that contains the
+accession numbers of the genomes in the GTDB database and several stats.
+Users can then extract the accession numbers and fetch the trait data
+from our trait database.
 
 # Citation

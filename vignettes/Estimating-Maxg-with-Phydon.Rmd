@@ -345,7 +345,44 @@ stopCluster(cl)
 
 # The example script from ASVs to the accession numbers of the genomes in the GTDB
 
-Under construction...
+We recommend users to use the GTDB database for their ASV sequences queries. The following script can be used to convert the ASV sequences to the accession numbers of the genomes in the GTDB database:
+
+
+```sh
+#!/bin/bash -i 
+
+### Create a conda environment with blast and download GTDB database for blast
+#conda create -n blast-env -c bioconda blast
+
+### Activate the environment and download the GTDB database
+conda activate blast-env
+
+#downloaded as follows into GTDB-blastdb-r220 directory:
+#wget https://data.gtdb.ecogenomic.org/releases/release220/220.0/genomic_files_all/ssu_all_r220.fna.gz
+makeblastdb -dbtype nucl -in GTDB-blastdb-r220/ssu_all_r220.fna 
+
+```
+
+This script will download the GTDB database and create a blast database. Users can then use the following script to convert the ASV sequences to the accession numbers of the genomes in the GTDB database:
+
+```sh
+#!/bin/bash -i 
+conda activate blast-env
+
+
+mkdir -p BLAST-output-r220
+
+#blast against GTDB r220
+blastn -query your_sequences.fasta -db GTDB-blastdb-r220/ssu_all_r220.fna -outfmt 6 -perc_identity 95 -qcov_hsp_perc 100 > BLAST-output-r220/your_BLASTOUTPUT-95pcID-vs-GTDB-r220-allssu.tsv
+
+### zip the output
+#zip -m BLAST-output-r220/your_BLASTOUTPUT-95pcID-vs-GTDB-r220-allssu.zip BLAST-output-r220/your_BLASTOUTPUT-95pcID-vs-GTDB-r220-allssu.tsv
+
+```
+
+The output of the script will be a tab-delimited file that contains the accession numbers of the genomes in the GTDB database and several stats. Users can then extract the accession numbers and fetch the trait data from our trait database. 
+
+
 
 
 # Citation
