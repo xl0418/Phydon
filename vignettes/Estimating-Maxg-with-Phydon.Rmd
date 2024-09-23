@@ -16,11 +16,11 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Phydon is a R package that estimates maximum growth rates of bacteria/archaea from genomic data and phylogenetic information. This package implements a method detailed in [Our paper](), leveraging phylogenetic signals and the mechanistic factor, [codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details of this mechanistic method), to enhance the accuracy of growth rate estimations. By integrating these advanced techniques, Phydon provides a robust tool for microbial growth rate analysis based on genomic information.
+Phydon is a R package that estimates maximum growth rates of bacteria/archaea from genomic data and phylogenetic information. This package implements a method detailed in [Our paper](), leveraging phylogenetic signals and the genomic statistical factor, [codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details), to enhance the accuracy of growth rate estimations. By integrating these advanced techniques, Phydon provides a robust tool for microbial growth rate analysis based on genomic information.
 
 # Installation
 
-You can install Phydon from GitHub with:
+Phydon installation is available from GitHub with:
 
 ```{r, eval = FALSE}
 if (!requireNamespace("devtools", quietly = TRUE))
@@ -45,90 +45,14 @@ install.packages("matrixStats")
 devtools::install_github("jlw-ecoevo/gRodon2")
 ```
 
-# Usage
 
-## Arguments
+# Minimal Examples
 
-- `data_info_df`: The data frame that contains the information of the genomes to be estimated. The first column should be the directory of the genomic data, i.e., xxx.ffn. The second column should be the accession number of genomes. Or genome names if user provides phylogenetic tree. The third column should be the optimal growth temperature.
+## Identified Genomes
 
-- `user_tree`: The user-provided phylogenetic tree. It can be obtained by running gtdbtk on users' genomes and generated under the foler "/output/classify/". If not provided (user_tree = NULL), the user is supposed to provide the accession number of the genomes. Default is NULL.
+When users' genomes are identified by accession numbers found in the GTDB, the `user_tree` argument is not required. Below is a minimal example illustrating how to use Phydon:
 
-- `tax`: The taxon of the species. It can be "bacteria" or "archaea". Default is "bacteria".
-
-- `regression_mode`: The regression model to be used. It can be "arithmetic_mean" or "geometric_mean". Default is "geometric_mean".
-
-- `gRodon_mode`: The mode of gRodon prediction. It can be "full" or "metagenome". Default is "full".
-
-## Identified/unidentified genomes in the GTDB `user_tree`
-
-Default is `NULL`, which considers the genomes are identified in the GTDB database.
-
--   **Identified genomes**: Users' genomes are identified in the GTDB database and assigned with accession numbers (e.g., RS_GCF_002749895.1). In this case, Phydon will search the GTDB for the representative genomes of the species that the users' genomes belong to and use the phylogenetic information and gRodon to enhance the growth rate predictions.
-
--   **Unidentified genomes**: Users' genomes are not identified in the GTDB database. In this case, user needs to provide a phylogeny tree that contains the users' genomes and the representative genomes in the GTDB database. Phydon will compute the phylogenetic distance of users' genome to the genomes in the training data and estimate the maximum growth rates.
-
-## Bacteria and Archaea `tax`
-
-By default, `tax` is set to `bacteria`. Users can set `tax` to `archaea` to estimate the maximum growth rates of archaea.
-
-Phydon supports both bacteria and archaea. Users **NEED** to specify the taxon by setting the argument `tax` to either `bacteria` or `archaea` to obtain the estimation. Otherwise, the predictions will be NA. The default is `bacteria`.
-
-## The functional types of the regression model `regression_mode`
-
-By default, `regression_mode="geometric"`. Possible values are `geometric` and `arithmetic`.
-
-Phydon provides two regression functional types for users to estimate the maximum growth rates of bacteria/archaea. One is the **arithmetic regression model**,
-
-$$
-\tilde{y}_{Phydon} = P \times \tilde{y}_{gRodon} + (1-P) \times \tilde{y}_{phylo}
-$$
-
-and the other is the **geometric regression model**
-
-$$
-\tilde{y}_{Phydon} = \tilde{y}_{gRodon}^P \times \tilde{y}_{phylo}^{(1-P)}
-$$
-
-
-where $P$ is probability of the gRodon predictions outcompeting the Phylopred predictions. The geometric regression model is the default model. Users can set the argument `regression_mode` to `arithmetic` to use the geometric regression model.
-
-## The gRodon mode `gRodon_mode`
-
-By default, `gRodon_mode="full"`. Possible values are `full` and `metagenome`.
-
-Phydon provides two modes for users to estimate the maximum growth rates of bacteria/archaea. One is the **full mode**, which considers CUBHE, ConsistencyHE, and CPB. The other is the **metagenome mode**, which only considers CUBHE in the regression model. This is used to prevent weird estimations from the metagenomes as consistency statistic is not appropriate. See the [gRodon](https://github.com/jlw-ecoevo/gRodon2) package for details. Importantly, metagenome mode is expected to be less accurate than the default mode, so only use this mode if you must. The default is `full`. 
-
-## General requirements for both modes
-
-> [!IMPORTANT]\
-> For both modes, as gRodon requires annotated genomes, users need to annotate the genomes before using Phydon. We recommend using [Prokka](https://github.com/tseemann/prokka) for genome annotation. Thus, the directory structure of the genomic data should be like this:
-
--   `genefiles/`
-    -   `genome1/`
-        -   `genome1.ffn`
-        -   `genome1.gff`
-        -   `genome1_CDS_names.txt`
-    -   `genome2/`
-        -   `genome2.ffn`
-        -   `genome2.gff`
-        -   `genome2_CDS_names.txt`
-    -   `genome3/`
-        -   `genome3.ffn`
-        -   `genome3.gff`
-        -   `genome3_CDS_names.txt`
-    -   ...
-
-> [!NOTE]\
-> The `genome1.ffn` is the fasta file of the genome, and the `genome1.gff` is the annotation file of the genome. These two files can be obtained when annotating genomes. The `genome1_CDS_names.txt` is the file that contains the names of the CDSs in the genome. Phydon will try to generate this file using `sed` command. If it fails, users need to generate this file manually. `sed` is usually available in Linux and MacOS. For Windows users, you can install `sed` from [here](https://sourceforge.net/projects/gnuwin32/files/sed/4.2.1/). See more details in the [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package. We recommend run Phydon in Linux or MacOS to avoid the potential issues in generating the `genome1_CDS_names.txt` file.
-
-
-## Identified genomes
-
-## Minimal example
-
-When users' genomes are identified, the argument `user_tree` is not needed and is set to `NULL` by default. A minimal example illustrate how to use Phydon is as follows:
-
-```{r setup1, warning=FALSE, eval=FALSE}
+```{r minexa1}
 library(Phydon)
 # load the example data
 data_info <- read.csv(system.file("extdata", "known.csv", package = "Phydon"))
@@ -142,101 +66,31 @@ for (i in 1:length(genomes)) {
   gene_location[i] <- system.file("extdata", paste0("known/",genomes[i],"/",genomes[i],".ffn"), package = "Phydon")
 }
 
+
 # Generate some genomes with user picked names.
 # The genome sequences are provided.
 # In this case, only gRodon estimation will be used.
 data_info$gene_location <- gene_location
-data_info <- rbind(data_info, data.frame(gene_location = data_info$gene_location, genome_name = c(1:10)))
+data_info <- rbind(data_info, data.frame(gene_location = data_info$gene_location, genome_name = c(1:11)))
 
-# estimate the maximum growth rate
-result <- Phydon(data_info)
+### temperature (optional)
+# data_info$temperature <- rep(20, nrow(data_info))
+
+# estimate the maximum growth rate in two modes
+result_full <- Phydon(data_info, gRodon_mode="full")
+result_metagenome <- Phydon(data_info, gRodon_mode="metagenome")
 
 ```
 
-## Input data structure
+## Unidentified Genomes
 
-The input data requires a data frame that contains the following columns:
+When users define their own genome names (i.e., the genome is not identified by an accession number in the GTDB), the `user_tree` argument is required. Below is a minimal example illustrating how to use Phydon in this case:
 
-The columns are:
-
--   `gene_location`: the directory of the annotated genomic data. The fasta file should be named as the accession number of the genome. For example, the fasta file of the genome with the accession number `RS_GCF_000024245.1` should be named as `RS_GCF_000024245.1.ffn`.
-
--   `genome_name`: the accession number of the genome that users want to predict the growth rate.
-
--   `temperature`: **Optional**. This is used for gRodon predictions. If not provided, gRodon will not consider temperature in the predictions.
-
-<details>
-
-<summary>What the input file looks like</summary>
-
-| gene_location | genome_name |
-| --- | --- |
-| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 |
-| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 |
-| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | RS_GCF_002906655.1 |
-| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | RS_GCF_003026105.1 |
-| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | RS_GCF_003026475.1 |
-| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | RS_GCF_003026815.1 |
-| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | RS_GCF_003144035.1 |
-| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 |
-| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 |
-| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 |
-
-</details>
-
-> [!Note]\
-> The second argument `user_tree` is not needed in this case. Phydon will search for the representative genomes of the species that the users' genomes belong to and use the phylogenetic information and gRodon to enhance the growth rate predictions.
-
-## Output
-
-The output of Phydon is a data frame that contains the following columns:
-
--   `genome`: the accession number of the genome that users aim to predict the growth rate
-
--   `rep_genome`: the representative genome of the species that the genome belongs to based on GTDB database; If it is NA, no matched representative genomes are found. The genome will be treated as a single species outside of the GTDB database.In this case, only gRodon predictions will be used. (See example result)
-
--   `species`: the species names of the genome based on GTDB database; If it is NA, no matched species are found.
-
--   `neighbor_repgenome_train`: the accession number of the representative genome that is most phylogeneitcally close to the genome in the data of the package. If it is NA, no matched representative genomes are found. The phylogenetic distance of the user's genome to the database is then set to Inf.
-
--   `phy_distance`: the phylogenetic distance of the user's genome to the database. If it is Inf, no matched representative genomes are found.
-
--   `gRodonpred`: the gRodon predictions of the genome based on the [gRodon2](https://github.com/jlw-ecoevo/gRodon2).
-
--   `phylopred`: the phylogenetic predictions of the genome based on the [picante](https://www.rdocumentation.org/packages/picante/versions/1.8.2).
-
--   `combopred`: the combined predictions of the genome based on the gRodon and phylogenetic predictions. The regression model is trained based on the data of the package. See details in the [paper]().
-
-<details>
-
-<summary>What 'result' looks like</summary>
-
-
-| genome | rep_genome | species | neighbor_repgenome_train | phy_distance | gRodonpred | phylopred | combopred |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| RS_GCF_002749895.1 | RS_GCF_002749895.1 | s\_\_Vibrio fujianensis | RS_GCF_000621645.1 | 0.12220675 | 1.1346118 | 0.4697509 | 0.4697509 |
-| RS_GCF_002849855.1 | RS_GCF_002849855.1 | s\_\_Vibrio azureus | RS_GCF_900460535.1 | 0.05166449 | 0.4913568 | 0.2783264 | 0.2783264 |
-| RS_GCF_002906655.1 | RS_GCF_002906655.1 | s\_\_Vibrio hyugaensis | RS_GCF_900460535.1 | 0.03447402 | 0.7658604 | 0.2783264 | 0.2783264 |
-| RS_GCF_003026105.1 | RS_GCF_003026105.1 | s\_\_Photobacterium sp003026105 | RS_GCF_003025615.1 | 0.16585578 | 1.5986925 | 2.0439385 | 2.0439385 |
-| RS_GCF_003026475.1 | RS_GCF_003026475.1 | s\_\_Photobacterium lipolyticum | RS_GCF_003025615.1 | 0.08080289 | 1.4924976 | 1.8805498 | 1.8805498 |
-| RS_GCF_003026815.1 | RS_GCF_003026815.1 | s\_\_Photobacterium damselae | RS_GCF_003025615.1 | 0.15489320 | 0.7407403 | 2.0439385 | 2.0439385 |
-| RS_GCF_003144035.1 | RS_GCF_003144035.1 | s\_\_Vibrio albus | RS_GCF_900460535.1 | 0.15592277 | 0.6097861 | 0.8919112 | 0.8919112 |
-| RS_GCF_003544875.1 | RS_GCF_003544875.1 | s\_\_Vibrio alfacsensis | RS_GCF_900460535.1 | 0.03506859 | 0.6234453 | 0.2783264 | 0.2783264 |
-| RS_GCF_003716875.1 | RS_GCF_003716875.1 | s\_\_Vibrio zhugei | RS_GCF_000621645.1 | 0.18306980 | 0.6364132 | 0.4697509 | 0.4697509 |
-| RS_GCF_900130105.1 | RS_GCF_024346755.1 | s\_\_Vibrio aerogenes | RS_GCF_900460535.1 | 0.17884206 | 1.6145463 | 0.5057288 | 0.5057288 |
-
-</details>
-
-## Unidentified genomes
-
-## Minimal example
-
-When users' genomes are not identified, the argument `user_tree` is needed. A minimal example illustrate how to use Phydon is as follows:
-
-```{r setup2, warning=FALSE, eval=FALSE}
+```{r minex2}
 library(Phydon)
 # load the example data
 data_info <- read.csv(system.file("extdata", "unknown.csv", package = "Phydon"))
+# load the example tree
 user_tree <- ape::read.tree(system.file("extdata", "usertree.tree", package = "Phydon"))
 
 #### To get the directory of the genomic data  ####
@@ -256,62 +110,220 @@ result <- Phydon(data_info, user_tree)
 
 ```
 
-## Input data structure
-
-The input data requires a data frame that contains the following columns:
-
-The columns are:
-
--   `gene_location`: the directory of the annotated genomic data. The annotated genomes should be named after genome names. For example, the ffn and gff files should be named as `user_genome1.ffn` and `user_genome1.gff`.
-
--   `genome_name`: the genome names. For example, `user_genome1`.
-
--   `temp`: **Optional**. This is used for gRodon predictions. If not provided, gRodon will not consider temperature in the predictions.
-
-## Output data structure
-
-The output of Phydon is the same as the case of identified genomes. The only difference is that the `species` columns will be `NA` as the accession numbers are not given.
 
 
-# Before you start
-
-## Unidentified genomes
+# Directory Structure for Genomic Data
 
 > [!IMPORTANT]\
-> When users' genomes are not identified, users need to provide a phylogenetic tree that contains the users' genomes and the representative genomes in the GTDB database. This process can be done by using the [GTDBTK](https://ecogenomics.github.io/GTDBTk/index.html). The phylogenetic tree can be obtained by running [`classify_wf`](https://ecogenomics.github.io/GTDBTk/commands/classify_wf.html) command on users' genomes:
+> For both modes, gRodon requires annotated genomes. Users must annotate their genomes before using Phydon. We recommend using [Prokka](https://github.com/tseemann/prokka) for genome annotation. The directory structure for genomic data should be organized as follows:
 
+-   `genefiles/`
+    -   `genome1/`
+        -   `genome1.ffn`
+        -   `genome1.gff`
+        -   `genome1_CDS_names.txt`
+    -   `genome2/`
+        -   `genome2.ffn`
+        -   `genome2.gff`
+        -   `genome2_CDS_names.txt`
+    -   `genome3/`
+        -   `genome3.ffn`
+        -   `genome3.gff`
+        -   `genome3_CDS_names.txt`
+    -   ...
+
+> [!NOTE]\
+> - The `genome1.ffn` file is the FASTA file of the genome, while the `genome1.gff` file is the corresponding annotation file. These files can be obtained during the genome annotation process. 
+
+> - The `genome1_CDS_names.txt` file contains the names of the coding sequences (CDSs) in the genome. Phydon will attempt to generate this file using the `sed` command. If this fails, users will need to create the file manually. `sed` is typically available on Linux and macOS systems. For Windows users, you can install `sed` from [here](https://sourceforge.net/projects/gnuwin32/files/sed/4.2.1/). 
+
+> - For more details, please refer to the [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package.
+
+> We recommend running Phydon on Linux or macOS to avoid potential issues with generating the `genome1_CDS_names.txt` file.
+
+
+
+
+# Usage
+
+## Arguments
+
+- `data_info_df`: A data frame containing detailed information about the genomes to be analyzed. This must include relevant metadata for each genome (e.g., accession numbers, species identifiers, etc.). See the section "Data Frame Format" below for specific requirements.
+
+
+- `user_tree`: A phylogenetic tree in Newick format (`Phylo class` in R) that represents the evolutionary relationships between the user's genomes and species from the GTDB (Genome Taxonomy Database). If users provide the genome accession numbers, the function will attempt to automatically retrieve a corresponding tree. If no accession numbers are given, users must supply the tree manually. This can be generated by running GTDB-Tk on the user's genome data, with the resulting tree typically found in the /output/classify/ folder after processing. The default value is NULL.
+
+- `tax`: The taxonomic domain of the species being analyzed. Acceptable values are "bacteria" or "archaea". This parameter determines which evolutionary models are applied. The default value is "bacteria".
+
+- `regression_mode`: Specifies the regression model to be used for estimating growth rates. Options are: "arithmetic_mean": Averages the growth rate estimates using an arithmetic mean. "geometric_mean": Uses the geometric mean for growth rate estimation (recommended for skewed data). The default is "geometric_mean".
+
+- `gRodon_mode`: The mode of gRodon predictions for genome-based growth rate estimates. Options are: "full": For full genome data (i.e., complete genomes). "metagenome": For metagenomic data (i.e., incomplete or assembled genomes). The default is "full".
+
+### `data_info_df`: The genomic data information
+
+The input data requires a data frame with the following columns:
+
+-   `gene_location`: The directory path to the annotated genomic data. Each genome's corresponding FASTA file should be named using its accession number. For example, the FASTA file for the genome with accession number `RS_GCF_000024245.1` should be named `RS_GCF_000024245.1.ffn`.
+
+-   `genome_name`: Either the accession number of the genome for which the user wants to predict the growth rate, or a user-defined name. If an accession number is provided, it is expected to exist in the GTDB database. If the accession number is not in GTDB, or if a user-defined name is used, Phydon will treat the genome as a unique species outside of GTDB. In such cases, **ONLY** gRodon-based predictions will be generated, while all other predictions will return `NA`. Refer to the example code for proper usage.
+
+-   `temperature`: (**Optional**) This column is used in gRodon predictions. If temperature data is not provided, gRodon will omit temperature effects in the growth rate predictions.
+
+<details>
+
+<summary>What the input file looks like</summary>
+
+| gene_location                                        | genome_name       | temperature |
+|-------------------------------------------------|--------------------|-------------|
+| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 | 10          |
+| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 | 25          |
+| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | RS_GCF_002906655.1 | 23          |
+| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | RS_GCF_003026105.1 | 5          |
+| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | RS_GCF_003026475.1 | 6          |
+| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | RS_GCF_003026815.1 | 15         |
+| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | RS_GCF_003144035.1 | 34          |
+| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 | 32          |
+| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 | 21          |
+| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 | 18          |
+| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | 1                  | 10          |
+| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | 2                  | 25          |
+| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | 3                  | 23          |
+| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | 4                  | 5          |
+| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | 5                  | 6          |
+| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | 6                  | 15         |
+| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | 7                  | 34          |
+| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | 8                  | 32          |
+| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | 9                  | 21          |
+| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | 10                 | 18          |
+
+</details>
+
+
+### `user_tree`: Identified/unidentified genomes in the GTDB 
+
+The default value for `user_tree` is `NULL`, which assumes that the genomes are identified in the GTDB database.
+
+-   **Identified genomes**: When users' genomes are identified in the GTDB and assigned accession numbers (e.g., `RS_GCF_002749895.1`), Phydon will search the GTDB for the representative genomes of the species that the users' genomes belong to. It will then leverage both phylogenetic information and gRodon to enhance the growth rate predictions.
+
+-   **Unidentified genomes**: If the users' genomes are not identified in the GTDB, the user must provide a phylogenetic tree that integrates users' genomes in the phylogenetic tree from the GTDB. In this case, Phydon will compute the phylogenetic distance between the users' genomes and the genomes in the training data to estimate the maximum growth rates. Otherwise, Phydon will only use gRodon predictions.
+
+### `tax`: Bacteria and Archaea 
+
+By default, the `tax` argument is set to "bacteria". Users can change this to "archaea" if they wish to estimate the maximum growth rates of `archaeal` genomes.
+
+Phydon supports both bacterial and archaeal genomes. Users must specify the taxon by setting the `tax` argument to either "bacteria" or "archaea" in order to generate valid growth rate estimates. If the taxon is not specified correctly, the predictions will return NA. The default is "bacteria".
+
+### `regression_mode`: The functional types of the regression model
+
+By default, regression_mode is set to "geometric". The possible values for this argument are "geometric" and "arithmetic".
+
+Phydon offers two regression models for estimating the maximum growth rates of bacterial or archaeal genomes. The **arithmetic regression model** is based on the following formula:
+
+```math
+\tilde{y}_{Phydon} = P \times \tilde{y}_{gRodon} + (1-P) \times \tilde{y}_{phylo}
 ```
+
+and the other is the **geometric regression model**
+
+```math
+\tilde{y}_{Phydon} = \tilde{y}_{gRodon}^P \times \tilde{y}_{phylo}^{(1-P)}
+```
+
+
+where $P$ is probability of the gRodon predictions outcompeting the Phylopred predictions. Users can choose between these models based on the nature of their data. The default is "geometric".
+
+### `gRodon_mode`: The gRodon mode
+
+By default, `gRodon_mode` is set to "full". The possible values are "full" and "metagenome".
+
+Phydon provides two modes for estimating the maximum growth rates of bacterial and archaeal genomes:
+
+- Full mode:
+
+This mode incorporates CUBHE, ConsistencyHE, and CPB in the regression model, allowing for a comprehensive estimation of growth rates.
+
+- Metagenome mode:
+
+This mode only uses CUBHE in the regression model to prevent unreliable estimations that may arise from metagenomic data, as the consistency statistic is not appropriate in this context. Users should be aware that the metagenome mode is expected to be less accurate than the full mode, and it should only be used when necessary.
+
+
+
+
+
+# Output
+
+The output of Phydon is a **data frame** containing the following columns:
+
+-   `genome`: The accession number/names of the genome for which users aim to predict the growth rate.
+
+-   `rep_genome`: The representative genome of the species to which the genome belongs, based on the GTDB database. If this value is NA, no matching representative genomes were found, and the genome will be treated as a unique species outside of the GTDB database. In this case, only gRodon predictions will be used.
+
+-   `species`: The species name of the genome based on the GTDB database. If this value is `NA`, no matching species were found.
+
+-   `neighbor_repgenome_train`: The accession number of the representative genome that is most phylogenetically close to the user's genome, based on the package's training data. If this value is `NA`, no matching representative genomes were found, and the phylogenetic distance will be set to infinity (`Inf`).
+
+-   `phy_distance`: The phylogenetic distance of the user's genome to the database. If this value is `Inf`, no matching representative genomes were found.
+
+-   `gRodonpred`:The gRodon predictions for the genome, based on the [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package.
+
+-   `phylopred`: The phylogenetic predictions for the genome, based on the [picante](https://www.rdocumentation.org/packages/picante/versions/1.8.2) package.
+
+-   `combopred`: The combined predictions for the genome, integrating both gRodon and phylogenetic predictions. The regression model is trained based on the data in the package. See details in our [paper]().
+
+Additionally, the output includes several useful metrics inherited from the gRodon package:
+
+
+- `CUBHE`: The mean codon usage bias of each highly expressed gene relative to all other genes.
+
+- `ConsistencyHE`: The mean codon usage bias of each highly expressed gene relative to all other highly expressed genes.
+
+- `CPB`: The genome-wide codon pair bias.
+
+- `FilteredSequences`: The number of sequences filtered due to length.
+
+- `LowerCI` and `UpperCI`: The 95% confidence intervals for the gRodon estimation.
+
+
+
+# Get A Phylogenetic Tree for Unidentified Genomes
+
+
+> [!IMPORTANT]\
+> When users' genomes are not identified in the GTDB database, they must provide a phylogenetic tree that includes both their genomes and the representative genomes from GTDB. This can be accomplished using [GTDB-Tk](https://ecogenomics.github.io/GTDBTk/index.html). To obtain the phylogenetic tree, run the [`classify_wf`](https://ecogenomics.github.io/GTDBTk/commands/classify_wf.html) command on your genomes as follows:
+
+```         
 gtdbtk classify_wf --skip_ani_screen --genome_dir /path/to/genomes --out_dir /output/
 ```
-> [!IMPORTANT]\
-> The phylogenetic tree will be generated under the foler `/output/classify/`. It is usually named as `gtdbtk.bac120.classify.tree.1.tree`. Users then need to use this tree as the input of Phydon.
+
+> The phylogenetic tree will be generated in the `/output/classify/` folder and is typically named `gtdbtk.bac120.classify.tree.1.tree`. Users should use this tree as the input for Phydon.
+
+
+# Summary of Workflow
+
+## Identified Genomes
+
+1.  Use Prokka to annotate the genomes, obtaining the `.ffn` and `.gff` files. Optionally, generate the `genome1_CDS_names.txt` file (not necessary if you run Phydon on Linux or macOS).
+
+2.  Structure the genomic data in the `genefiles/` directory and create the `data_info.csv` file as described above.
+
+3.  Execute Phydon using the `data_info.csv` file.
+
+## Unidentified Genomes
+
+1.  Use GTDB-Tk to run the `classify_wf` command to create the `user_tree`.
+
+2.  Use Prokka to annotate the genomes, obtaining the `.ffn` and `.gff` files. Optionally, generate the `genome1_CDS_names.txt` file (not necessary if you run Phydon on Linux or macOS).
+
+3.  Structure the genomic data in the `genefiles/` directory and create the `data_info.csv` file as described above.
+
+4.  Execute Phydon using the `data_info.csv` file and the `user_tree`.
 
 
 
-# The basic workflow
 
-## Unidentified genomes
+# Processing A Large Number of Genomes in Parallel
 
-1. Generate the phylogenetic tree `user_tree` using GTDBTK `classify_wf`.
-
-2.  Annotate the genomes using Prokka and obtain `.ffn` and `.gff` files. Optionally, generate the `genome1_CDS_names.txt` file. Not necessary if you run Phydon in Linux or MacOS.
-
-3.  Organize the genomic data in the `genefiles/` directory and generate `data_info.csv` file in the structure abovementioned.
-
-4.  Run Phydon with the `data_info.csv` file and the `user_tree`.
-
-## Identified genomes
-
-1.  Annotate the genomes using Prokka and obtain `.ffn` and `.gff` files. Optionally, generate the `genome1_CDS_names.txt` file. Not necessary if you run Phydon in Linux or MacOS.
-
-2.  Organize the genomic data in the `genefiles/` directory and generate `data_info.csv` file in the structure abovementioned..
-
-3.  Run Phydon with the `data_info.csv` file.
-
-
-# Processing a large number of genomes in parallel
-
-In some cases, users may have a large number of genomes to estimate. Here, we provide an example script that can be used to estimate a large number of genomes in parallel. The script is as follows:
+In some cases, users may have a large number of genomes to estimate. To facilitate this process, we provide an example script that can be used to estimate multiple genomes in parallel. Below is the script:
 
 ```{r, eval = FALSE}
 library(Phydon)
@@ -339,13 +351,19 @@ phydon_res <- foreach(i = 1:nrow(data_info), .combine = rbind, .packages = "Phyd
 }
 stopCluster(cl)
 
+phydon_res
 # save
 # write.csv(phydon_res, "phydon_prediction_results.csv", row.names=FALSE)
 ```
 
-# The example script from ASVs to the accession numbers of the genomes in the GTDB
+This script allows users to run Phydon for each genome in the specified directory in parallel, which can significantly speed up the estimation process.
 
-We recommend users to use the GTDB database for their ASV sequences queries. The following script can be used to convert the ASV sequences to the accession numbers of the genomes in the GTDB database:
+# Example Script for Converting ASV Sequences to Accession Numbers in the GTDB
+
+We recommend using the GTDB database for querying your ASV sequences. The following script can be used to download the GTDB database and convert ASV sequences to the accession numbers of the genomes in the GTDB database.
+
+
+**Step 1: Download the GTDB Database and Create a BLAST Database**
 
 
 ```sh
@@ -359,11 +377,18 @@ conda activate blast-env
 
 #downloaded as follows into GTDB-blastdb-r220 directory:
 #wget https://data.gtdb.ecogenomic.org/releases/release220/220.0/genomic_files_all/ssu_all_r220.fna.gz
+
+# Create a BLAST database
 makeblastdb -dbtype nucl -in GTDB-blastdb-r220/ssu_all_r220.fna 
 
 ```
 
-This script will download the GTDB database and create a blast database. Users can then use the following script to convert the ASV sequences to the accession numbers of the genomes in the GTDB database:
+This script downloads the GTDB database and creates a BLAST database.
+
+
+**Step 2: Convert ASV Sequences to Accession Numbers**
+
+Users can then use the following script to convert the ASV sequences to the accession numbers of the genomes in the GTDB database:
 
 ```sh
 #!/bin/bash -i 
@@ -380,8 +405,7 @@ blastn -query your_sequences.fasta -db GTDB-blastdb-r220/ssu_all_r220.fna -outfm
 
 ```
 
-The output of the script will be a tab-delimited file that contains the accession numbers of the genomes in the GTDB database and several stats. Users can then extract the accession numbers and fetch the trait data from our trait database. 
-
+The output of this script will be a tab-delimited file containing the accession numbers of the genomes in the GTDB database along with several statistics. Users can then extract the accession numbers and fetch trait data from the trait database. 
 
 
 
