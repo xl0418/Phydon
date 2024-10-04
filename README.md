@@ -44,9 +44,10 @@ Estimating maximum growth rates of bacteria from genomic data with
 
 Phydon is a R package that estimates maximum growth rates of
 bacteria/archaea from genomic data and phylogenetic information. This
-package implements a method detailed in [Our paper](), leveraging
-phylogenetic signals and the genomic statistical factor, [codon usage
-bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see
+package implements a method detailed in [Our
+paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1),
+leveraging phylogenetic signals and the genomic statistical factor,
+[codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see
 [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details), to enhance
 the accuracy of growth rate estimations. By integrating these advanced
 techniques, Phydon provides a robust tool for microbial growth rate
@@ -251,28 +252,28 @@ The input data requires a data frame with the following columns:
 What the input file looks like
 </summary>
 
-| gene_location                                   | genome_name        | temperature |
-|-------------------------------------------------|--------------------|-------------|
-| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 | 10          |
-| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 | 25          |
-| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | RS_GCF_002906655.1 | 23          |
-| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | RS_GCF_003026105.1 | 5           |
-| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | RS_GCF_003026475.1 | 6           |
-| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | RS_GCF_003026815.1 | 15          |
-| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | RS_GCF_003144035.1 | 34          |
-| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 | 32          |
-| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 | 21          |
-| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 | 18          |
-| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | 1                  | 10          |
-| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | 2                  | 25          |
-| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | 3                  | 23          |
-| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | 4                  | 5           |
-| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | 5                  | 6           |
-| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | 6                  | 15          |
-| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | 7                  | 34          |
-| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | 8                  | 32          |
-| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | 9                  | 21          |
-| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | 10                 | 18          |
+| gene_location | genome_name | temperature |
+|----|----|----|
+| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | RS_GCF_002749895.1 | 10 |
+| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | RS_GCF_002849855.1 | 25 |
+| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | RS_GCF_002906655.1 | 23 |
+| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | RS_GCF_003026105.1 | 5 |
+| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | RS_GCF_003026475.1 | 6 |
+| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | RS_GCF_003026815.1 | 15 |
+| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | RS_GCF_003144035.1 | 34 |
+| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | RS_GCF_003544875.1 | 32 |
+| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | RS_GCF_003716875.1 | 21 |
+| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | RS_GCF_900130105.1 | 18 |
+| known/RS_GCF_002749895.1/RS_GCF_002749895.1.ffn | 1 | 10 |
+| known/RS_GCF_002849855.1/RS_GCF_002849855.1.ffn | 2 | 25 |
+| known/RS_GCF_002906655.1/RS_GCF_002906655.1.ffn | 3 | 23 |
+| known/RS_GCF_003026105.1/RS_GCF_003026105.1.ffn | 4 | 5 |
+| known/RS_GCF_003026475.1/RS_GCF_003026475.1.ffn | 5 | 6 |
+| known/RS_GCF_003026815.1/RS_GCF_003026815.1.ffn | 6 | 15 |
+| known/RS_GCF_003144035.1/RS_GCF_003144035.1.ffn | 7 | 34 |
+| known/RS_GCF_003544875.1/RS_GCF_003544875.1.ffn | 8 | 32 |
+| known/RS_GCF_003716875.1/RS_GCF_003716875.1.ffn | 9 | 21 |
+| known/RS_GCF_900130105.1/RS_GCF_900130105.1.ffn | 10 | 18 |
 
 </details>
 
@@ -387,7 +388,8 @@ columns:
 
 - `combopred`: The combined predictions for the genome, integrating both
   gRodon and phylogenetic predictions. The regression model is trained
-  based on the data in the package. See details in our [paper]().
+  based on the data in the package. See details in our
+  [paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1).
 
 Additionally, the output includes several useful metrics inherited from
 the gRodon package:
@@ -542,3 +544,8 @@ statistics. Users can then extract the accession numbers and fetch trait
 data from the trait database.
 
 # Citation
+
+Liang Xu, Emily Zakem, JL Weissman, Improved maximum growth rate
+prediction from microbial genomes by integrating phylogenetic
+information. bioRxiv 2024.10.03.616540; doi:
+<https://doi.org/10.1101/2024.10.03.616540>
