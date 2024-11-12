@@ -25,7 +25,13 @@ Estimating maximum growth rates of bacteria from genomic data with **Phydon**.
 
 # Introduction
 
-Phydon is a R package that estimates maximum growth rates of bacteria/archaea from genomic data and phylogenetic information. This package implements a method detailed in [Our paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1), leveraging phylogenetic signals and the genomic statistical factor, [codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details), to enhance the accuracy of growth rate estimations. By integrating these advanced techniques, Phydon provides a robust tool for microbial growth rate analysis based on genomic information.
+Phydon is a R package that estimates maximum growth rates of bacteria/archaea from genomic data and phylogenetic information. This package implements a method detailed in [Our paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1), leveraging phylogenetic signals and the genomic statistical factor, [codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details), to enhance the accuracy of growth rate estimations. By integrating these advanced techniques, Phydon provides a robust tool for microbial growth rate analysis based on genomic information. 
+
+# EGPO database
+
+We developed a comprehensive database of temperature-corrected maximum growth rates for 111,349 species-representative genomes from GTDB v220, generated using Phydon and available as [EGPO](https://github.com/xl0418/Phydon/releases/tag/v1.0.0). This represents the largest temperature corrected maximum growth rate prediction database to date.
+
+
 
 # Installation
 

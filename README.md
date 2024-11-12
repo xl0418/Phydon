@@ -1,6 +1,7 @@
 
 - [Phydon](#phydon)
 - [Introduction](#introduction)
+- [EGPO database](#egpo-database)
 - [Installation](#installation)
 - [Minimal Examples](#minimal-examples)
   - [Identified Genomes](#identified-genomes)
@@ -52,6 +53,15 @@ leveraging phylogenetic signals and the genomic statistical factor,
 the accuracy of growth rate estimations. By integrating these advanced
 techniques, Phydon provides a robust tool for microbial growth rate
 analysis based on genomic information.
+
+# EGPO database
+
+We developed a comprehensive database of temperature-corrected maximum
+growth rates for 111,349 species-representative genomes from GTDB v220,
+generated using Phydon and available as
+[EGPO](https://github.com/xl0418/Phydon/releases/tag/v1.0.0). This
+represents the largest temperature corrected maximum growth rate
+prediction database to date.
 
 # Installation
 
