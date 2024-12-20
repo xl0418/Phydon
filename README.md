@@ -225,9 +225,13 @@ result <- Phydon(data_info, user_tree)
 
 - `regression_mode`: Specifies the regression model to be used for
   estimating growth rates. Options are: “arithmetic_mean”: Averages the
-  growth rate estimates using an arithmetic mean. “geometric_mean”: Uses
-  the geometric mean for growth rate estimation (recommended for skewed
-  data). The default is “geometric_mean”.
+  growth rate estimates using an arithmetic mean with a continuous P
+  value (see ). “geometric_mean”: Uses the geometric mean for growth
+  rate estimation (recommended for skewed data).
+  “arithmetic_mean_binaryP”: Averages the growth rate estimates using an
+  arithmetic mean with a binary P value. “geometric_mean_binaryP”: Uses
+  the geometric mean for growth rate estimation with a binary P value.
+  The default is “geometric_mean”.
 
 - `gRodon_mode`: The mode of gRodon predictions for genome-based growth
   rate estimates. Options are: “full”: For full genome data (i.e.,
@@ -320,12 +324,17 @@ is “bacteria”.
 
 ### `regression_mode`: The functional types of the regression model
 
-By default, regression_mode is set to “geometric”. The possible values
-for this argument are “geometric” and “arithmetic”.
+By default, regression_mode is set to “geometric_mean”. The possible
+values for this argument are “geometric_mean” and “arithmetic_mean” that
+use models with a continuous P. Or “geometric_mean_binaryP” and
+“arithmetic_mean_binaryP” that use models with a binary P use models
+with a binary P.
 
 Phydon offers two regression models for estimating the maximum growth
 rates of bacterial or archaeal genomes. The **arithmetic regression
-model** is based on the following formula:
+model with a continuous P** is based on the following formula (also see
+[Our
+paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1)):
 
 ``` math
 \tilde{y}_{Phydon} = P \times \tilde{y}_{gRodon} + (1-P) \times \tilde{y}_{phylo}
@@ -339,7 +348,15 @@ and the other is the **geometric regression model**
 
 where $P$ is probability of the gRodon predictions outcompeting the
 Phylopred predictions. Users can choose between these models based on
-the nature of their data. The default is “geometric”.
+the nature of their data. The default is “geometric_mean”.
+
+We also include the model using a binary P denoted by
+“geometric_mean_binaryP” or “arithmetic_mean_binaryP”, although we do
+not recommend it as instability occurs.
+
+``` math
+\tilde{y}_{Phydon} = \tilde{y}_{gRodon} \times I(P > 0.5) + \tilde{y}_{phylo} \times I(P <= 0.5)
+```
 
 ### `gRodon_mode`: The gRodon mode
 

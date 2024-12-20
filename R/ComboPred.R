@@ -29,8 +29,9 @@ combopred <- function(input_df, reg_model, reg_model_tmp, regression_mode="geome
     if(regression_mode == "arithmetic_mean") {
       input_df$combopred <- input_df$gRodonpred * (test_data$pred_fitted) + input_df$phylopred * (1 - test_data$pred_fitted)
     } else if(regression_mode == "geometric_mean") {
-
       input_df$combopred <- input_df$gRodonpred ^ (test_data$pred_fitted) * input_df$phylopred ^ (1 - test_data$pred_fitted)
+    } else if(regression_mode == "arithmetic_mean_binaryP" || regression_mode == "geometric_mean_binaryP"){
+      input_df$combopred <- input_df$gRodonpred * (test_data$pred_fitted > 0.5) + input_df$phylopred * (test_data$pred_fitted <= 0.5)
     } else{
       stop("Invalid regression mode. Please choose either 'arithmetic_mean' or 'geometric_mean'.")
     }

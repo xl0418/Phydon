@@ -19,7 +19,7 @@ Phydon(
 
 \item{tax}{The taxon of the species. It can be "bacteria" or "archaea". Default is "bacteria".}
 
-\item{regression_mode}{The regression model to be used. It can be "arithmetic_mean" or "geometric_mean". Default is "geometric_mean".}
+\item{regression_mode}{The regression model to be used. It can be "arithmetic_mean" or "geometric_mean" that use a continuous P. Or "arithmetic_mean_binaryP" or "geometric_mean_binaryP" use a binary P. Default is "geometric_mean".}
 
 \item{gRodon_mode}{The mode of gRodon prediction. It can be "full" or "metagenome". Default is "full".}
 }
