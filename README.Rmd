@@ -427,6 +427,12 @@ blastn -query your_sequences.fasta -db GTDB-blastdb-r220/ssu_all_r220.fna -outfm
 The output of this script will be a tab-delimited file containing the accession numbers of the genomes in the GTDB database along with several statistics. Users can then extract the accession numbers and fetch trait data from the trait database. 
 
 
+# Optimal `P` value
+
+Our weighting scheme takes into account how the relative expected accuracies of gRodon prediction and phylogenetic prediction change with both the phylogenetic distance of the query genome to the training set and the expected growth rate of the query genome.
+
+![default](https://github.com/xl0418/phydon_figures/blob/main/FigS6.png)
+
 
 # Citation
 

@@ -29,6 +29,7 @@
 - [Example Script for Converting ASV Sequences to Accession Numbers in
   the
   GTDB](#example-script-for-converting-asv-sequences-to-accession-numbers-in-the-gtdb)
+- [Optimal `P` value](#optimal-p-value)
 - [Citation](#citation)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -569,6 +570,19 @@ The output of this script will be a tab-delimited file containing the
 accession numbers of the genomes in the GTDB database along with several
 statistics. Users can then extract the accession numbers and fetch trait
 data from the trait database.
+
+# Optimal `P` value
+
+Our weighting scheme takes into account how the relative expected
+accuracies of gRodon prediction and phylogenetic prediction change with
+both the phylogenetic distance of the query genome to the training set
+and the expected growth rate of the query genome.
+
+<figure>
+<img src="https://github.com/xl0418/phydon_figures/blob/main/FigS6.png"
+alt="default" />
+<figcaption aria-hidden="true">default</figcaption>
+</figure>
 
 # Citation
 
