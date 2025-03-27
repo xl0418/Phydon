@@ -576,12 +576,18 @@ data from the trait database.
 Our weighting scheme takes into account how the relative expected
 accuracies of gRodon prediction and phylogenetic prediction change with
 both the phylogenetic distance of the query genome to the training set
-and the expected growth rate of the query genome.
+and the expected growth rate of the query genome. See details in our
+paper [Our
+paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1).
 
 <figure>
 <img src="https://github.com/xl0418/phydon_figures/blob/main/FigS6.png"
-alt="default" />
-<figcaption aria-hidden="true">default</figcaption>
+alt="(a). The P values of the arithmetic model change with both the phylogenetic distance of the query genome to the training set and the expected growth rate of the query genome inferred by gRodon. (b), (c) the curve of P values at two extreme growth rates." />
+<figcaption aria-hidden="true">(a). The P values of the arithmetic model
+change with both the phylogenetic distance of the query genome to the
+training set and the expected growth rate of the query genome inferred
+by gRodon. (b), (c) the curve of P values at two extreme growth
+rates.</figcaption>
 </figure>
 
 # Citation
