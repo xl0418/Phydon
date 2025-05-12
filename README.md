@@ -47,9 +47,9 @@ Estimating maximum growth rates of bacteria from genomic data with
 Phydon is a R package that estimates maximum growth rates of
 bacteria/archaea from genomic data and phylogenetic information. This
 package implements a method detailed in [Our
-paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1),
-leveraging phylogenetic signals and the genomic statistical factor,
-[codon usage bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see
+paper](https://www.nature.com/articles/s41467-025-59558-9), leveraging
+phylogenetic signals and the genomic statistical factor, [codon usage
+bias (CUB)](https://github.com/jlw-ecoevo/gRodon2) (see
 [gRodon](https://github.com/jlw-ecoevo/gRodon2) for details), to enhance
 the accuracy of growth rate estimations. By integrating these advanced
 techniques, Phydon provides a robust tool for microbial growth rate
@@ -334,8 +334,7 @@ with a binary P.
 Phydon offers two regression models for estimating the maximum growth
 rates of bacterial or archaeal genomes. The **arithmetic regression
 model with a continuous P** is based on the following formula (also see
-[Our
-paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1)):
+[Our paper](https://www.nature.com/articles/s41467-025-59558-9)):
 
 ``` math
 \tilde{y}_{Phydon} = P \times \tilde{y}_{gRodon} + (1-P) \times \tilde{y}_{phylo}
@@ -417,7 +416,7 @@ columns:
 - `combopred`: The combined predictions for the genome, integrating both
   gRodon and phylogenetic predictions. The regression model is trained
   based on the data in the package. See details in our
-  [paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1).
+  [paper](https://www.nature.com/articles/s41467-025-59558-9).
 
 Additionally, the output includes several useful metrics inherited from
 the gRodon package:
@@ -577,8 +576,7 @@ Our weighting scheme takes into account how the relative expected
 accuracies of gRodon prediction and phylogenetic prediction change with
 both the phylogenetic distance of the query genome to the training set
 and the expected growth rate of the query genome. See details in our
-paper [Our
-paper](https://www.biorxiv.org/content/10.1101/2024.10.03.616540v1).
+paper [Our paper](https://www.nature.com/articles/s41467-025-59558-9).
 
 <figure>
 <img src="https://github.com/xl0418/phydon_figures/blob/main/FigS6.png"
