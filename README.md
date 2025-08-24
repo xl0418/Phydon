@@ -31,7 +31,6 @@
   GTDB](#example-script-for-converting-asv-sequences-to-accession-numbers-in-the-gtdb)
 - [Optimal `P` value](#optimal-p-value)
 - [Citation](#citation)
-- [Citation](#citation-1)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -594,11 +593,9 @@ rates.</figcaption>
 
 # Citation
 
-# Citation
-
 > Xu, L., Zakem, E. & Weissman, J. Improved maximum growth rate
 > prediction from microbial genomes by integrating phylogenetic
-> information. Nat Commun \> 16, 4256 (2025).
+> information. Nat Commun 16, 4256 (2025).
 > <https://doi.org/10.1038/s41467-025-59558-9>
 
     @article{RN1855,

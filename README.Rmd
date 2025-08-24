@@ -434,9 +434,6 @@ Our weighting scheme takes into account how the relative expected accuracies of 
 ![(a). The P values of the arithmetic model change with both the phylogenetic distance of the query genome to the training set and the expected growth rate of the query genome inferred by gRodon. (b), (c) the curve of P values at two extreme growth rates.](https://github.com/xl0418/phydon_figures/blob/main/FigS6.png)
 
 
-
-# Citation
-
 # Citation
 
 > Xu, L., Zakem, E. & Weissman, J. Improved maximum growth rate prediction from microbial genomes by integrating phylogenetic information. Nat Commun 16, 4256 (2025). https://doi.org/10.1038/s41467-025-59558-9
