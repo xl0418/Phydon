@@ -31,12 +31,14 @@
   GTDB](#example-script-for-converting-asv-sequences-to-accession-numbers-in-the-gtdb)
 - [Optimal `P` value](#optimal-p-value)
 - [Citation](#citation)
+- [Citation](#citation-1)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Phydon
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 Estimating maximum growth rates of bacteria from genomic data with
@@ -263,7 +265,9 @@ The input data requires a data frame with the following columns:
   temperature effects in the growth rate predictions.
 
 <details>
+
 <summary>
+
 What the input file looks like
 </summary>
 
@@ -346,7 +350,7 @@ and the other is the **geometric regression model**
 \tilde{y}_{Phydon} = \tilde{y}_{gRodon}^P \times \tilde{y}_{phylo}^{(1-P)}
 ```
 
-where $P$ is probability of the gRodon predictions outcompeting the
+where $`P`$ is probability of the gRodon predictions outcompeting the
 Phylopred predictions. Users can choose between these models based on
 the nature of their data. The default is “geometric_mean”.
 
@@ -590,7 +594,23 @@ rates.</figcaption>
 
 # Citation
 
-Liang Xu, Emily Zakem, JL Weissman, Improved maximum growth rate
-prediction from microbial genomes by integrating phylogenetic
-information. bioRxiv 2024.10.03.616540; doi:
-<https://doi.org/10.1101/2024.10.03.616540>
+# Citation
+
+> Xu, L., Zakem, E. & Weissman, J. Improved maximum growth rate
+> prediction from microbial genomes by integrating phylogenetic
+> information. Nat Commun \> 16, 4256 (2025).
+> <https://doi.org/10.1038/s41467-025-59558-9>
+
+    @article{RN1855,
+       author = {Xu, Liang and Zakem, Emily and Weissman, J. L.},
+       title = {Improved maximum growth rate prediction from microbial genomes by integrating phylogenetic information},
+       journal = {Nature Communications},
+       volume = {16},
+       number = {1},
+       pages = {4256},
+       ISSN = {2041-1723},
+       DOI = {10.1038/s41467-025-59558-9},
+       url = {https://doi.org/10.1038/s41467-025-59558-9},
+       year = {2025},
+       type = {Journal Article}
+    }

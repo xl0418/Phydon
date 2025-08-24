@@ -437,4 +437,24 @@ Our weighting scheme takes into account how the relative expected accuracies of 
 
 # Citation
 
-Liang Xu, Emily Zakem, JL Weissman, Improved maximum growth rate prediction from microbial genomes by integrating phylogenetic information. bioRxiv 2024.10.03.616540; doi: https://doi.org/10.1101/2024.10.03.616540
+# Citation
+
+> Xu, L., Zakem, E. & Weissman, J. Improved maximum growth rate prediction from microbial genomes by integrating phylogenetic information. Nat Commun 16, 4256 (2025). https://doi.org/10.1038/s41467-025-59558-9
+
+```
+@article{RN1855,
+   author = {Xu, Liang and Zakem, Emily and Weissman, J. L.},
+   title = {Improved maximum growth rate prediction from microbial genomes by integrating phylogenetic information},
+   journal = {Nature Communications},
+   volume = {16},
+   number = {1},
+   pages = {4256},
+   ISSN = {2041-1723},
+   DOI = {10.1038/s41467-025-59558-9},
+   url = {https://doi.org/10.1038/s41467-025-59558-9},
+   year = {2025},
+   type = {Journal Article}
+}
+```
+
+
