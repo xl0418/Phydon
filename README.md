@@ -349,7 +349,7 @@ and the other is the **geometric regression model**
 \tilde{y}_{Phydon} = \tilde{y}_{gRodon}^P \times \tilde{y}_{phylo}^{(1-P)}
 ```
 
-where $`P`$ is probability of the gRodon predictions outcompeting the
+where $P$ is probability of the gRodon predictions outcompeting the
 Phylopred predictions. Users can choose between these models based on
 the nature of their data. The default is “geometric_mean”.
 
@@ -410,16 +410,18 @@ columns:
   were found.
 
 - `gRodonpred`:The gRodon predictions for the genome, based on the
-  [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package.
+  [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package. The unit is
+  the **minimal doubling time in hours**.
 
 - `phylopred`: The phylogenetic predictions for the genome, based on the
   [picante](https://www.rdocumentation.org/packages/picante/versions/1.8.2)
-  package.
+  package. The unit is the **minimal doubling time in hours**.
 
 - `combopred`: The combined predictions for the genome, integrating both
   gRodon and phylogenetic predictions. The regression model is trained
   based on the data in the package. See details in our
-  [paper](https://www.nature.com/articles/s41467-025-59558-9).
+  [paper](https://www.nature.com/articles/s41467-025-59558-9). The unit
+  is the **minimal doubling time in hours**.
 
 Additionally, the output includes several useful metrics inherited from
 the gRodon package:

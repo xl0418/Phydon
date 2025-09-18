@@ -283,11 +283,11 @@ The output of Phydon is a **data frame** containing the following columns:
 
 -   `phy_distance`: The phylogenetic distance of the user's genome to the database. If this value is `Inf`, no matching representative genomes were found.
 
--   `gRodonpred`:The gRodon predictions for the genome, based on the [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package.
+-   `gRodonpred`:The gRodon predictions for the genome, based on the [gRodon2](https://github.com/jlw-ecoevo/gRodon2) package. The unit is the **minimal doubling time in hours**.
 
--   `phylopred`: The phylogenetic predictions for the genome, based on the [picante](https://www.rdocumentation.org/packages/picante/versions/1.8.2) package.
+-   `phylopred`: The phylogenetic predictions for the genome, based on the [picante](https://www.rdocumentation.org/packages/picante/versions/1.8.2) package.  The unit is the **minimal doubling time in hours**.
 
--   `combopred`: The combined predictions for the genome, integrating both gRodon and phylogenetic predictions. The regression model is trained based on the data in the package. See details in our [paper](https://www.nature.com/articles/s41467-025-59558-9).
+-   `combopred`: The combined predictions for the genome, integrating both gRodon and phylogenetic predictions. The regression model is trained based on the data in the package. See details in our [paper](https://www.nature.com/articles/s41467-025-59558-9).  The unit is the **minimal doubling time in hours**.
 
 Additionally, the output includes several useful metrics inherited from the gRodon package:
 
